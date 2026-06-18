@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Signing System | Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+    <div class="lang-selector">
+        <i class="fa-solid fa-globe"></i>
+        <select id="langSwitch" onchange="changeLanguage(this.value)">
+            <option value="th">🇹🇭 ไทย</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="jp">🇯🇵 日本語</option>
+        </select>
+    </div>
+
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+
+    <div class="login-card">
+        <div class="company-logo">
+            <img src="../Photo/Isuzu.png" alt="Isuzu Logo">
+        </div>
+        
+        <h2 id="mainTitle" data-i18n="title">ระบบจัดการเอกสาร</h2>
+        <p class="sub-text" data-i18n="subtitle">E-Approval & Signature System</p>
+
+        <form action="/dashboard" method="GET">
+            <input type="hidden" name="role" id="userRole" value="employee">
+
+            <div class="input-group">
+                <label id="userLabel" data-i18n="emp_id">รหัสพนักงาน</label>
+                <div class="input-wrapper">
+                    <i class="fa-regular fa-user"></i>
+                    <input type="text" id="emp_input" placeholder="ระบุรหัสพนักงาน" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label data-i18n="password">รหัสผ่าน</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="pass_input" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <div class="form-options">
+                <label><input type="checkbox"> <span data-i18n="remember">จดจำการเข้าสู่ระบบ</span></label>
+                <a href="#" data-i18n="forgot">ลืมรหัสผ่าน?</a>
+            </div>
+
+            <button type="submit" class="btn-login" data-i18n="login_btn">เข้าสู่ระบบ</button>
+
+            <div class="admin-link">
+                <a href="#" id="toggleAdminBtn" onclick="toggleAdminMode(event)" data-i18n="admin_login">
+                    <i class="fa-solid fa-shield-halved"></i> เข้าสู่ระบบในฐานะผู้ดูแลระบบ
+                </a>
+            </div>
+        </form>
+
+        <div class="footer-text" data-i18n="footer">
+            &copy; 2026 - Isuzu Engine Manufacturing Co., (Thailand) Ltd.
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+</body>
+</html>

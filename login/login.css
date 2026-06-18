@@ -1,0 +1,214 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Prompt', sans-serif;
+}
+
+body {
+    background-color: #f1f5f9;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.5s ease; /* เพิ่มเอฟเฟกต์เวลาสลับโหมดมืด */
+}
+
+/* -----------------------------------
+   ปุ่มเลือกภาษา
+----------------------------------- */
+.lang-selector {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 8px 15px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 100;
+    transition: all 0.5s ease;
+}
+.lang-selector i { color: #dc2626; transition: color 0.5s ease; }
+.lang-selector select {
+    border: none;
+    background: transparent;
+    font-family: 'Prompt', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1e293b;
+    outline: none;
+    cursor: pointer;
+    transition: color 0.5s ease;
+}
+
+/* -----------------------------------
+   พื้นหลังกราฟิกเบลอ
+----------------------------------- */
+.bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+    transition: background-color 0.5s ease;
+}
+.shape-1 {
+    width: 400px; height: 400px;
+    background: rgba(220, 38, 38, 0.25);
+    top: -100px; right: -50px;
+}
+.shape-2 {
+    width: 500px; height: 500px;
+    background: rgba(239, 68, 68, 0.15);
+    bottom: -150px; left: -100px;
+}
+
+/* -----------------------------------
+   กล่องล็อกอินหลัก
+----------------------------------- */
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    width: 420px;
+    padding: 40px 40px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1), 
+                0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    text-align: center;
+    max-height: 95vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    transition: all 0.5s ease;
+}
+.login-card::-webkit-scrollbar { display: none; }
+
+/* -----------------------------------
+   โลโก้
+----------------------------------- */
+.company-logo { display: flex; justify-content: center; margin-bottom: 25px; }
+.company-logo img { height: 40px; width: auto; object-fit: contain; }
+
+/* ตัวอักษรพื้นฐาน */
+h2 { color: #0f172a; font-size: 24px; margin-bottom: 5px; font-weight: 600; transition: color 0.5s; }
+.sub-text { color: #64748b; font-size: 14px; margin-bottom: 25px; transition: color 0.5s; }
+
+/* -----------------------------------
+   ฟอร์มกรอกข้อมูล
+----------------------------------- */
+.input-group { margin-bottom: 15px; text-align: left; }
+.input-group label { display: block; font-size: 13px; font-weight: 500; color: #475569; margin-bottom: 8px; padding-left: 5px; transition: color 0.5s; }
+.input-wrapper { position: relative; }
+.input-wrapper i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 15px; transition: color 0.5s; }
+.input-wrapper input {
+    width: 100%; padding: 14px 15px 14px 45px; background: #f8fafc;
+    border: 1px solid #e2e8f0; border-radius: 12px; font-size: 14px; color: #1e293b; outline: none; transition: all 0.3s;
+}
+.input-wrapper input:focus { background: #ffffff; border-color: #ef4444; box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1); }
+
+.form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; font-size: 13px; }
+.form-options label { color: #64748b; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: color 0.5s; }
+.form-options a { color: #dc2626; text-decoration: none; font-weight: 500; transition: color 0.5s; }
+.form-options a:hover { text-decoration: underline; }
+input[type="checkbox"] { accent-color: #dc2626; width: 15px; height: 15px; cursor: pointer; }
+
+/* ปุ่มล็อกอิน */
+.btn-login {
+    width: 100%; padding: 15px; background: #dc2626; color: white; border: none;
+    border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s;
+    box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.2);
+}
+.btn-login:hover { background: #b91c1c; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(220, 38, 38, 0.3); }
+
+.footer-text { margin-top: 30px; font-size: 12px; color: #94a3b8; transition: color 0.5s; }
+
+/* ปุ่มสลับโหมดแอดมิน */
+.admin-link { margin-top: 20px; font-size: 13px; text-align: center; }
+.admin-link a { color: #64748b; text-decoration: none; transition: all 0.3s; font-weight: 500; }
+.admin-link a:hover { color: #dc2626; }
+
+
+/* =========================================================
+   ADMIN MODE THEME (DARK MODE)
+   เมื่อ <body class="admin-mode"> ถูกเปิดใช้งานจาก Javascript
+========================================================= */
+
+/* เปลี่ยนพื้นหลังเว็บให้มืดลง */
+body.admin-mode { background-color: #0f172a; }
+
+/* เปลี่ยนแสงกราฟิกให้เป็นสีฟ้า/น้ำเงินที่ดู Tech ขึ้น */
+body.admin-mode .shape-1 { background: rgba(56, 189, 248, 0.15); } 
+body.admin-mode .shape-2 { background: rgba(59, 130, 246, 0.1); }
+
+/* กล่องล็อกอินเป็นสีเทาเข้ม */
+body.admin-mode .login-card {
+    background: rgba(30, 41, 59, 0.85);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 
+                0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+/* =========================================================
+   ADMIN MODE THEME (DARK MODE) - ปรับให้อ่านง่าย สบายตา
+========================================================= */
+
+/* พื้นหลังเว็บโทนดำสว่างขึ้นนิดนึงให้ดูไม่มืดทึบไป */
+body.admin-mode { background-color: #111827; }
+
+/* กล่องล็อกอิน: เพิ่มเส้นขอบบางๆ ให้กล่องลอยเด่นขึ้นมาจากพื้นหลัง */
+body.admin-mode .login-card {
+    background: #1f2937;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    border: 1px solid #374151; 
+}
+
+/* ปรับสีตัวอักษรให้สว่าง (ขาวและเทาอ่อน) ให้อ่านง่ายสุดๆ */
+body.admin-mode h2 { color: #ffffff; }
+body.admin-mode .sub-text { color: #9ca3af; }
+body.admin-mode .input-group label { color: #e5e7eb; font-weight: 600; }
+body.admin-mode .footer-text { color: #6b7280; }
+
+/* ช่องกรอกข้อมูล: แก้ปัญหากล่องขาวสว่างจ้า เปลี่ยนเป็นเทาเข้ม */
+body.admin-mode .input-wrapper input {
+    background: #374151; 
+    border: 1px solid #4b5563; 
+    color: #ffffff; 
+}
+body.admin-mode .input-wrapper input:focus {
+    background: #111827;
+    border-color: #dc2626; /* ขอบแดงตอนพิมพ์ให้เข้ากับธีมองค์กร */
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2);
+}
+body.admin-mode .input-wrapper i { color: #9ca3af; }
+
+/* ปุ่มและลิงก์ต่างๆ */
+body.admin-mode .form-options label { color: #e5e7eb; }
+body.admin-mode .form-options a { color: #fca5a5; } /* สีแดงอ่อนๆ ให้อ่านง่ายบนพื้นดำ */
+body.admin-mode .form-options a:hover { color: #f87171; }
+body.admin-mode .admin-link a { color: #9ca3af; }
+body.admin-mode .admin-link a:hover { color: #ffffff; }
+
+/* เปลี่ยนปุ่มเข้าสู่ระบบกลับเป็นสีแดงเข้ม */
+body.admin-mode .btn-login { 
+    background: #dc2626; 
+    color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+body.admin-mode .btn-login:hover { 
+    background: #b91c1c; 
+}
+
+/* ปุ่มเปลี่ยนภาษา */
+body.admin-mode .lang-selector {
+    background: #1f2937;
+    border: 1px solid #374151;
+}
+body.admin-mode .lang-selector select, 
+body.admin-mode .lang-selector i { color: #e5e7eb; }
+body.admin-mode .lang-selector select option { background: #1f2937; color: #ffffff; }

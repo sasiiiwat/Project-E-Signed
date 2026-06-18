@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | E-Signing System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="../Photo/Isuzu.png" alt="Logo" class="logo-img">
+        </div>
+
+        <div class="menu-label">ผู้ดูแลระบบ</div>
+        <ul class="sidebar-menu">
+            <li class="active" onclick="switchTab('dashboard', this)">
+                <i class="fa-solid fa-border-all"></i> <span>ภาพรวมระบบ</span>
+            </li>
+            <li onclick="switchTab('departments', this)">
+                <i class="fa-regular fa-building"></i> <span>จัดการแผนก</span>
+            </li>
+            <li onclick="switchTab('users', this)">
+                <i class="fa-solid fa-user-group"></i> <span>จัดการผู้ใช้งาน</span>
+            </li>
+            <li onclick="switchTab('smtp', this)">
+                <i class="fa-solid fa-gear"></i> <span>ตั้งค่า SMTP</span>
+            </li>
+        </ul>
+
+    </aside>
+
+    <main class="main-content">
+        
+        <header class="top-header">
+            <h2 id="page-title">Admin Dashboard</h2>
+            
+            <div class="user-profile-container">
+                <div class="user-profile" onclick="toggleDropdown(event)">
+                    <div class="user-info">
+                        <strong>Super Admin</strong>
+                        <span>ADMIN</span>
+                    </div>
+                    <div class="avatar"><i class="fa-regular fa-user"></i></div>
+                </div>
+                
+                <div id="profileDropdown" class="profile-dropdown">
+                    <div class="dropdown-header">
+                        <strong>Super Admin</strong>
+                        <p class="role-text">ADMIN</p>
+                        <p class="email-text">admin@isuzu.com</p>
+                    </div>
+                    <div class="dropdown-footer">
+                        <a href="../login/login.html" class="logout-link">ออกจากระบบ</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            
+            <section id="dashboard" class="content-section active">
+                <div class="stat-cards">
+                    <div class="card">
+                        <div class="card-info">
+                            <p>พนักงานทั้งหมด</p>
+                            <h3>0</h3>
+                            <span class="text-gray">ยังไม่มีพนักงานในระบบ</span>
+                        </div>
+                        <div class="card-icon bg-blue"><i class="fa-solid fa-users"></i></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-info">
+                            <p>แผนกทั้งหมด</p>
+                            <h3>0</h3>
+                            <span class="text-gray">ยังไม่ได้ตั้งค่าแผนก</span>
+                        </div>
+                        <div class="card-icon bg-purple"><i class="fa-regular fa-building"></i></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-info">
+                            <p>เอกสารวันนี้</p>
+                            <h3>0</h3>
+                            <span class="text-gray">อัปโหลดใหม่วันนี้</span>
+                        </div>
+                        <div class="card-icon bg-orange"><i class="fa-regular fa-file-lines"></i></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-info">
+                            <p>เอกสารรออนุมัติ</p>
+                            <h3>0</h3>
+                            <span class="text-gray">ที่ยังไม่เสร็จสิ้น</span>
+                        </div>
+                        <div class="card-icon bg-yellow"><i class="fa-regular fa-clock"></i></div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3>เอกสารล่าสุดในระบบ</h3>
+                        <a href="#" class="view-all">ดูทั้งหมด</a>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>เวลา</th>
+                                <th>ผู้สร้างเอกสาร</th>
+                                <th>หัวข้อเอกสาร</th>
+                                <th>สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 40px 20px; color: #94a3b8;">
+                                    <i class="fa-regular fa-folder-open" style="font-size: 32px; margin-bottom: 15px; display: block; color: #cbd5e1;"></i>
+                                    ยังไม่มีข้อมูลเอกสารในระบบ
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="users" class="content-section">
+                <div class="page-header">
+                    <div>
+                        <h3>รายชื่อพนักงาน</h3>
+                        <p class="sub-text">จัดการบัญชีผู้ใช้งาน สิทธิ์ และสถานะ</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn btn-outline-green"><i class="fa-solid fa-file-csv"></i> CSV Import</button>
+                        <button class="btn btn-primary" onclick="openModal()"><i class="fa-solid fa-user-plus"></i> เพิ่มพนักงาน</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="ค้นหาชื่อ, รหัสพนักงาน หรืออีเมล...">
+                    </div>
+                    <table class="data-table mt-3">
+                        <thead>
+                            <tr>
+                                <th>พนักงาน</th>
+                                <th>แผนก</th>
+                                <th>สิทธิ์ (ROLE)</th>
+                                <th>สถานะ</th>
+                                <th>จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>นายพนักงาน ทั่วไป</strong><br><small>001 | user@example.com</small></td>
+                                <td>IT</td>
+                                <td>User</td>
+                                <td><span class="text-green fw-bold">Active</span></td>
+                                <td>
+                                    <button class="icon-btn edit"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="icon-btn delete"><i class="fa-regular fa-trash-can"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="smtp" class="content-section">
+                <div class="table-container" style="max-width: 800px; margin: 0 auto;">
+                    <h3>ตั้งค่าการส่งเมล (SMTP)</h3>
+                    <p class="sub-text mb-4">กำหนดค่า Email Server สำหรับระบบแจ้งเตือนอัตโนมัติ</p>
+                    <div style="padding: 20px; border: 1px dashed #ccc; border-radius: 8px; text-align: center; color: #666;">
+                        (พื้นที่สำหรับใส่ฟอร์ม SMTP ตามในรูปภาพ)
+                    </div>
+                </div>
+            </section>
+            
+            <section id="departments" class="content-section">
+                <div class="table-container">
+                    <h3>จัดการแผนก</h3>
+                    <p class="sub-text mb-4">เพิ่มลบแก้ไขรายชื่อแผนกในองค์กร</p>
+                    </div>
+            </section>
+
+        </div>
+    </main>
+
+    <div id="addUserModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>เพิ่มพนักงานใหม่</h3>
+            <form>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>รหัสพนักงาน <span class="text-red">*</span></label>
+                        <input type="text" placeholder="IEMT001">
+                    </div>
+                    <div class="form-group">
+                        <label>แผนก</label>
+                        <select><option>-- เลือกแผนก --</option><option>IT</option><option>Manager</option></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>ชื่อ-นามสกุล <span class="text-red">*</span></label>
+                    <input type="text" placeholder="สมชาย ใจดี">
+                </div>
+                <div class="form-group">
+                    <label>อีเมล <span class="text-red">*</span></label>
+                    <input type="email" placeholder="user@example.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>สิทธิ์การใช้งาน</label>
+                        <select><option>User (ผู้ใช้งานทั่วไป)</option><option>Admin</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>สถานะ</label>
+                        <select><option>Active (ใช้งานปกติ)</option><option>Inactive</option></select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary">บันทึกข้อมูล</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
