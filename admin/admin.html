@@ -178,10 +178,38 @@
             </section>
             
             <section id="departments" class="content-section">
-                <div class="table-container">
-                    <h3>จัดการแผนก</h3>
-                    <p class="sub-text mb-4">เพิ่มลบแก้ไขรายชื่อแผนกในองค์กร</p>
+                
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <div>
+                        <h2 style="font-size: 22px; font-weight: 600; color: var(--text-main); margin-bottom: 5px;">จัดการแผนก</h2>
+                        <p style="color: var(--text-muted); font-size: 14px;">เพิ่มลบแก้ไขรายชื่อแผนกในองค์กร</p>
                     </div>
+                    <button class="btn btn-primary" style="box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);" onclick="openAddDeptModal()">
+                        <i class="fa-solid fa-plus"></i> เพิ่มแผนกใหม่
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">#</th>
+                                <th style="width: 70%;">ชื่อแผนก</th>
+                                <th style="width: 20%; text-align: center;">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3" style="text-align: center; padding: 60px 20px;">
+                                    <i class="fa-regular fa-building" style="font-size: 48px; color: #e2e8f0; margin-bottom: 15px; display: block;"></i>
+                                    <p style="color: var(--text-muted); font-size: 15px; font-weight: 500;">ยังไม่มีข้อมูลแผนกในระบบ</p>
+                                    <p style="color: #94a3b8; font-size: 13px; margin-top: 5px;">คลิกที่ปุ่ม "เพิ่มแผนกใหม่" ด้านบนมุมขวาเพื่อเริ่มต้น</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
             </section>
 
         </div>
@@ -224,6 +252,19 @@
                     <button type="button" class="btn btn-primary">บันทึกข้อมูล</button>
                 </div>
             </form>
+        </div>
+    </div>
+    <div id="addDeptModal" class="modal-overlay">
+        <div class="modal-content" style="width: 400px;">
+            <h3>เพิ่มแผนกใหม่</h3>
+            <div class="form-group">
+                <label>ชื่อแผนก <span style="color: #dc2626;">*</span></label>
+                <input type="text" id="deptNameInput" placeholder="ระบุชื่อแผนก เช่น Manager, IT, HR">
+            </div>
+            <div class="modal-actions">
+            <button class="btn btn-outline" onclick="closeAddDeptModal()">ยกเลิก</button>
+            <button class="btn btn-primary" onclick="saveDepartment()">บันทึกข้อมูล</button>
+            </div>
         </div>
     </div>
 

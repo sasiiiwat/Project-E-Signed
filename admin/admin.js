@@ -53,3 +53,30 @@ window.addEventListener('click', function(e) {
         dropdown.classList.remove('show');
     }
 });
+// =========================================
+// ส่วนจัดการแผนก (Departments)
+// =========================================
+
+// 1. ฟังก์ชันเปิดหน้าต่างป๊อปอัป
+function openAddDeptModal() {
+    document.getElementById('addDeptModal').style.display = 'flex';
+}
+
+// 2. ฟังก์ชันปิดหน้าต่าง และล้างข้อความในช่องกรอก
+function closeAddDeptModal() {
+    document.getElementById('addDeptModal').style.display = 'none';
+    document.getElementById('deptNameInput').value = ''; 
+}
+
+// 3. ฟังก์ชันบันทึกข้อมูล
+function saveDepartment() {
+    const deptName = document.getElementById('deptNameInput').value;
+    
+    if (deptName.trim() === '') {
+        alert('กรุณาระบุชื่อแผนกด้วยครับ!');
+        return; 
+    }
+
+    alert('บันทึกแผนก: ' + deptName + ' สำเร็จแล้ว!');
+    closeAddDeptModal();
+}

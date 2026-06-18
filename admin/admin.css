@@ -47,57 +47,83 @@ body {
     object-fit: contain; 
 }
 
-.menu-label { padding: 20px 30px 10px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
-/* --------------------------------- Sidebar Menu --------------------------------- */
-.sidebar-menu { list-style: none; flex: 1; }
+.menu-label { 
+    padding: 20px 30px 10px; 
+    font-size: 14px; /* ปรับขนาดให้ใหญ่ขึ้น (จากเดิม 12px) */
+    color: var(--text-muted); 
+    font-weight: 600; 
+    letter-spacing: 0.5px; /* เพิ่มช่องไฟตัวอักษรนิดนึงให้ดูเป็นหัวข้อที่สบายตา */
+}
 
-/* 1. สภาวะปกติ: ตัวหนังสือและไอคอนเป็นสีเทา */
+/* --------------------------------- Sidebar Menu (Modern UI Redesign - Icon Fix) --------------------------------- */
+.sidebar-menu { 
+    list-style: none; 
+    flex: 1; 
+    padding-top: 15px; 
+}
+
+/* 1. สภาวะปกติ (ยังไม่กด) */
 .sidebar-menu li { 
-    padding: 12px 30px; 
+    margin: 5px 20px; 
+    padding: 12px 20px; 
     cursor: pointer; 
-    color: #94a3b8; /* สีเทามาตรฐาน */
-    font-size: 15px; 
-    border-left: 4px solid transparent; 
-    transition: 0.3s;
+    border-radius: 12px; 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
     display: flex; 
     align-items: flex-start; 
     gap: 15px; 
-    font-weight: 500; 
+    background: transparent;
 }
 
-/* ไอคอนเป็นสีเทาตอนปกติ */
+/* ตั้งค่าสีเทา */
+.sidebar-menu li i,
+.sidebar-menu li span {
+    color: #64748b; 
+    transition: all 0.3s ease;
+}
+
+/* กำหนดความหนาเฉพาะ "ตัวหนังสือ" เท่านั้น */
+.sidebar-menu li span {
+    font-size: 15px;
+    font-weight: 500; 
+    display: block;
+    line-height: 1.5;
+}
+
+/* ตำแหน่งไอคอน (ปล่อย font-weight ไว้ตามธรรมชาติของมัน) */
 .sidebar-menu li i { 
     font-size: 18px; 
     width: 20px; 
     text-align: center; 
     margin-top: 4px; 
-    color: #94a3b8; 
 }
 
-/* 2. เมื่อเอาเมาส์ไปชี้: เปลี่ยนเป็นสีแดง */
+/* 2. เมื่อเอาเมาส์ไปชี้ (Hover) */
 .sidebar-menu li:hover { 
-    color: var(--primary); 
-    background: var(--primary-light); 
+    background: #f8fafc; 
+    transform: translateX(6px); 
 }
-.sidebar-menu li:hover i { 
+.sidebar-menu li:hover i,
+.sidebar-menu li:hover span { 
     color: var(--primary); 
 }
 
-/* 3. เมื่อกดเลือก (Active): เปลี่ยนเป็นสีแดงและเพิ่มความหนา */
+/* 3. เมื่อกดเลือก (Active) */
 .sidebar-menu li.active { 
-    color: var(--primary); 
-    background: var(--primary-light); 
-    border-left-color: var(--primary); 
-    font-weight: 600; 
-}
-.sidebar-menu li.active i { 
-    color: var(--primary); 
+    background: var(--primary); 
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.25); 
+    transform: translateX(6px); 
 }
 
-/* คืนค่าธรรมชาติให้ตัวหนังสือ */
-.sidebar-menu li span {
-    display: block;
-    line-height: 1.5;
+/* เปลี่ยนสีเป็นขาวทั้งคู่ แต่ไม่กำหนดความหนาตรงนี้แล้ว! */
+.sidebar-menu li.active i,
+.sidebar-menu li.active span { 
+    color: #ffffff; 
+}
+
+/* เพิ่มความหนาให้เฉพาะตัวหนังสือตอนที่ Active */
+.sidebar-menu li.active span {
+    font-weight: 600; 
 }
 /* --------------------------------- Main Content --------------------------------- */
 .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
