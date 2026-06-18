@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | E-Signing System</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
@@ -18,43 +20,53 @@
         <div class="menu-label">ผู้ดูแลระบบ</div>
         <ul class="sidebar-menu">
             <li class="active" onclick="switchTab('dashboard', this)">
-                <i class="fa-solid fa-border-all"></i> <span>ภาพรวมระบบ</span>
+                <i class="fa-solid fa-border-all"></i> <span data-i18n="menu_dashboard">ภาพรวมระบบ</span>
             </li>
             <li onclick="switchTab('departments', this)">
-                <i class="fa-regular fa-building"></i> <span>จัดการแผนก</span>
+                <i class="fa-regular fa-building"></i> <span data-i18n="menu_departments">จัดการแผนก</span>
             </li>
             <li onclick="switchTab('users', this)">
-                <i class="fa-solid fa-user-group"></i> <span>จัดการผู้ใช้งาน</span>
+                <i class="fa-solid fa-user-group"></i> <span data-i18n="menu_users">จัดการผู้ใช้งาน</span>
             </li>
             <li onclick="switchTab('smtp', this)">
-                <i class="fa-solid fa-gear"></i> <span>ตั้งค่า SMTP</span>
+                <i class="fa-solid fa-gear"></i> <span data-i18n="menu_smtp">ตั้งค่า SMTP</span>
             </li>
         </ul>
-
     </aside>
 
     <main class="main-content">
-        
+        <!-- แถบ Header ด้านบน -->
         <header class="top-header">
             <h2 id="page-title">Admin Dashboard</h2>
             
-            <div class="user-profile-container">
-                <div class="user-profile" onclick="toggleDropdown(event)">
-                    <div class="user-info">
-                        <strong>Super Admin</strong>
-                        <span>ADMIN</span>
-                    </div>
-                    <div class="avatar"><i class="fa-regular fa-user"></i></div>
-                </div>
+            <!-- โปรไฟล์ผู้ใช้งาน & ระบบเปลี่ยนภาษา -->
+            <div style="display: flex; align-items: center; gap: 20px;">
                 
-                <div id="profileDropdown" class="profile-dropdown">
-                    <div class="dropdown-header">
-                        <strong>Super Admin</strong>
-                        <p class="role-text">ADMIN</p>
-                        <p class="email-text">admin@isuzu.com</p>
+                <!-- 🌍 Dropdown เปลี่ยนภาษา -->
+                <select id="langSelect" onchange="changeLanguage(this.value)" style="padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Prompt'; background: #f8fafc; cursor: pointer; outline: none; font-size: 14px;">
+                    <option value="th">🇹🇭 TH</option>
+                    <option value="en">🇬🇧 EN</option>
+                    <option value="jp">🇯🇵 JP</option>
+                </select>
+
+                <div class="user-profile-container">
+                    <div class="user-profile" onclick="toggleDropdown(event)">
+                        <div class="user-info">
+                            <strong>Super Admin</strong>
+                            <span>ADMIN</span>
+                        </div>
+                        <div class="avatar"><i class="fa-regular fa-user"></i></div>
                     </div>
-                    <div class="dropdown-footer">
-                        <a href="../login/login.html" class="logout-link">ออกจากระบบ</a>
+                    
+                    <div id="profileDropdown" class="profile-dropdown">
+                        <div class="dropdown-header">
+                            <strong>Super Admin</strong>
+                            <p class="role-text">ADMIN</p>
+                            <p class="email-text">admin@isuzu.com</p>
+                        </div>
+                        <div class="dropdown-footer">
+                            <a href="../login/login.html" class="logout-link">ออกจากระบบ</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,15 +78,15 @@
                 <div class="stat-cards">
                     <div class="card">
                         <div class="card-info">
-                            <p>พนักงานทั้งหมด</p>
-                            <h3>0</h3>
-                            <span class="text-gray">ยังไม่มีพนักงานในระบบ</span>
+                            <p data-i18n="card_users">พนักงานทั้งหมด</p>
+                            <h3 id="dashboardUserCount">0</h3>
+                            <span id="dashboardUserText" class="text-gray">ยังไม่มีพนักงานในระบบ</span>
                         </div>
                         <div class="card-icon bg-blue"><i class="fa-solid fa-users"></i></div>
                     </div>
                     <div class="card">
                         <div class="card-info">
-                            <p>แผนกทั้งหมด</p>
+                            <p data-i18n="card_depts">แผนกทั้งหมด</p>
                             <h3 id="dashboardDeptCount">0</h3>
                             <span id="dashboardDeptText" class="text-gray">ยังไม่ได้ตั้งค่าแผนก</span>
                         </div>
@@ -82,17 +94,17 @@
                     </div>
                     <div class="card">
                         <div class="card-info">
-                            <p>เอกสารวันนี้</p>
+                            <p data-i18n="card_docs_today">เอกสารวันนี้</p>
                             <h3>0</h3>
-                            <span class="text-gray">อัปโหลดใหม่วันนี้</span>
+                            <span class="text-gray" data-i18n="card_desc_today">อัปโหลดใหม่วันนี้</span>
                         </div>
                         <div class="card-icon bg-orange"><i class="fa-regular fa-file-lines"></i></div>
                     </div>
                     <div class="card">
                         <div class="card-info">
-                            <p>เอกสารรออนุมัติ</p>
+                            <p data-i18n="card_docs_pending">เอกสารรออนุมัติ</p>
                             <h3>0</h3>
-                            <span class="text-gray">ที่ยังไม่เสร็จสิ้น</span>
+                            <span class="text-gray" data-i18n="card_desc_pending">ที่ยังไม่เสร็จสิ้น</span>
                         </div>
                         <div class="card-icon bg-yellow"><i class="fa-regular fa-clock"></i></div>
                     </div>
@@ -100,23 +112,23 @@
 
                 <div class="table-container">
                     <div class="table-header">
-                        <h3>เอกสารล่าสุดในระบบ</h3>
-                        <a href="#" class="view-all">ดูทั้งหมด</a>
+                        <h3 data-i18n="recent_docs">เอกสารล่าสุดในระบบ</h3>
+                        <a href="#" class="view-all" data-i18n="btn_view_all">ดูทั้งหมด</a>
                     </div>
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>เวลา</th>
-                                <th>ผู้สร้างเอกสาร</th>
-                                <th>หัวข้อเอกสาร</th>
-                                <th>สถานะ</th>
+                                <th data-i18n="th_time">เวลา</th>
+                                <th data-i18n="th_creator">ผู้สร้างเอกสาร</th>
+                                <th data-i18n="th_doc_title">หัวข้อเอกสาร</th>
+                                <th data-i18n="th_status_doc">สถานะ</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td colspan="4" style="text-align: center; padding: 40px 20px; color: #94a3b8;">
                                     <i class="fa-regular fa-folder-open" style="font-size: 32px; margin-bottom: 15px; display: block; color: #cbd5e1;"></i>
-                                    ยังไม่มีข้อมูลเอกสารในระบบ
+                                    <span data-i18n="empty_docs">ยังไม่มีข้อมูลเอกสารในระบบ</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -124,152 +136,138 @@
                 </div>
             </section>
 
-            <section id="users" class="content-section">
-                <div class="page-header">
+            <section id="departments" class="content-section">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
                     <div>
-                        <h3>รายชื่อพนักงาน</h3>
-                        <p class="sub-text">จัดการบัญชีผู้ใช้งาน สิทธิ์ และสถานะ</p>
+                        <h2 style="font-size: 22px; font-weight: 600; color: var(--text-main); margin-bottom: 5px;" data-i18n="title_dept">จัดการแผนก</h2>
+                        <p style="color: var(--text-muted); font-size: 14px;" data-i18n="desc_dept">เพิ่มลบแก้ไขรายชื่อแผนกในองค์กร</p>
+                    </div>
+                    <button class="btn btn-primary" style="box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);" onclick="openAddDeptModal()">
+                        <i class="fa-solid fa-plus"></i> <span data-i18n="btn_add_dept">เพิ่มแผนกใหม่</span>
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%;">#</th>
+                                <th style="width: 70%;" data-i18n="th_dept_name">ชื่อแผนก</th>
+                                <th style="width: 20%; text-align: center;" data-i18n="th_manage">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deptTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="users" class="content-section">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <div>
+                        <h2 style="font-size: 22px; font-weight: 600; color: var(--text-main); margin-bottom: 5px;" data-i18n="title_user">จัดการผู้ใช้งาน</h2>
+                        <p style="color: var(--text-muted); font-size: 14px;" data-i18n="desc_user">รายชื่อพนักงาน จัดการบัญชีผู้ใช้งาน สิทธิ์ และสถานะ</p>
                     </div>
                     <div class="header-actions">
-                        <button class="btn btn-outline-green"><i class="fa-solid fa-file-csv"></i> CSV Import</button>
-                        <button class="btn btn-primary" onclick="openModal()"><i class="fa-solid fa-user-plus"></i> เพิ่มพนักงาน</button>
+                        <button class="btn btn-outline-green" onclick="openCsvModal()"><i class="fa-solid fa-file-csv"></i> CSV Import</button>
+                        <button class="btn btn-primary" onclick="openAddUserModal()">
+                            <i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_add_user">เพิ่มพนักงาน</span>
+                        </button>
                     </div>
                 </div>
 
                 <div class="table-container">
-                    <div class="search-bar">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" placeholder="ค้นหาชื่อ, รหัสพนักงาน หรืออีเมล...">
+                    <div class="table-header">
+                        <div class="search-bar">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchInput" placeholder="ค้นหาชื่อ, รหัสพนักงาน หรืออีเมล..." oninput="renderUsers()">
+                        </div>
                     </div>
-                    <table class="data-table mt-3">
+                    <table class="data-table">
                         <thead>
                             <tr>
-                                <th>พนักงาน</th>
-                                <th>แผนก</th>
-                                <th>สิทธิ์ (ROLE)</th>
-                                <th>สถานะ</th>
-                                <th>จัดการ</th>
+                                <th style="width: 35%;" data-i18n="th_employee">พนักงาน</th>
+                                <th style="width: 20%;" data-i18n="th_dept_name">แผนก</th>
+                                <th style="width: 15%;" data-i18n="th_role">สิทธิ์ (ROLE)</th>
+                                <th style="width: 15%;" data-i18n="th_status">สถานะ</th>
+                                <th style="width: 15%; text-align: center;" data-i18n="th_manage">จัดการ</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>นายพนักงาน ทั่วไป</strong><br><small>001 | user@example.com</small></td>
-                                <td>IT</td>
-                                <td>User</td>
-                                <td><span class="text-green fw-bold">Active</span></td>
-                                <td>
-                                    <button class="icon-btn edit"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="icon-btn delete"><i class="fa-regular fa-trash-can"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <tbody id="userTableBody">
+                            </tbody>
                     </table>
                 </div>
             </section>
 
             <section id="smtp" class="content-section">
                 <div class="table-container" style="max-width: 800px; margin: 0 auto;">
-                    <h3>ตั้งค่าการส่งเมล (SMTP)</h3>
-                    <p class="sub-text mb-4">กำหนดค่า Email Server สำหรับระบบแจ้งเตือนอัตโนมัติ</p>
+                    <h3 data-i18n="title_smtp">ตั้งค่าการส่งเมล (SMTP)</h3>
+                    <p class="sub-text mb-4" data-i18n="desc_smtp">กำหนดค่า Email Server สำหรับระบบแจ้งเตือนอัตโนมัติ</p>
                     <div style="padding: 20px; border: 1px dashed #ccc; border-radius: 8px; text-align: center; color: #666;">
                         (พื้นที่สำหรับใส่ฟอร์ม SMTP ตามในรูปภาพ)
                     </div>
                 </div>
             </section>
-            
-            <section id="departments" class="content-section">
-                
-                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <div>
-                        <h2 style="font-size: 22px; font-weight: 600; color: var(--text-main); margin-bottom: 5px;">จัดการแผนก</h2>
-                        <p style="color: var(--text-muted); font-size: 14px;">เพิ่มลบแก้ไขรายชื่อแผนกในองค์กร</p>
-                    </div>
-                    <button class="btn btn-primary" style="box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);" onclick="openAddDeptModal()">
-                        <i class="fa-solid fa-plus"></i> เพิ่มแผนกใหม่
-                    </button>
-                </div>
 
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 10%;">#</th>
-                            <th style="width: 70%;">ชื่อแผนก</th>
-                            <th style="width: 20%; text-align: center;">จัดการ</th>
-                        </tr>
-                    </thead>
-                    <tbody id="deptTableBody">
-                        </tbody>
-                </table>
-            </div>
-                
-            </section>
-
-        </div>
-    </main>
+        </div> 
 
     <div id="addUserModal" class="modal-overlay">
         <div class="modal-content" style="width: 550px;">
-            <h3>เพิ่มพนักงานใหม่</h3>
+            <h3 id="userModalTitle">เพิ่มพนักงานใหม่</h3>
+            <input type="hidden" id="editUserIndex" value=""> 
             
             <div class="form-row">
                 <div class="form-group">
                     <label>รหัสพนักงาน <span style="color: #dc2626;">*</span></label>
-                    <input type="text" placeholder="IEMT001">
+                    <input type="text" id="empId" placeholder="IEMT001">
                 </div>
                 <div class="form-group">
-                    <label>แผนก</label>
-                    <select>
-                        <option>-- เลือกแผนก --</option>
-                        <option>Manager</option>
-                        <option>IT</option>
+                    <label>แผนก <span style="color: #dc2626;">*</span></label>
+                    <select id="empDept">
+                        <option value="">-- เลือกแผนก --</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>ชื่อ-นามสกุล <span style="color: #dc2626;">*</span></label>
-                <input type="text" placeholder="สมชาย ใจดี">
+                <input type="text" id="empName" placeholder="สมชาย ใจดี">
             </div>
 
             <div class="form-group">
                 <label>อีเมล <span style="color: #dc2626;">*</span></label>
-                <input type="email" placeholder="user@example.com">
+                <input type="email" id="empEmail" placeholder="user@example.com">
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>สิทธิ์การใช้งาน</label>
-                    <select>
-                        <option>User (ผู้ใช้งานทั่วไป)</option>
-                        <option>Admin (ผู้ดูแลระบบ)</option>
+                    <select id="empRole">
+                        <option value="User">User (ผู้ใช้งานทั่วไป)</option>
+                        <option value="Admin">Admin (ผู้ดูแลระบบ)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>สถานะ</label>
-                    <select>
-                        <option>Active (ใช้งานปกติ)</option>
-                        <option>Inactive (ระงับการใช้งาน)</option>
+                    <select id="empStatus">
+                        <option value="Active">Active (ใช้งานปกติ)</option>
+                        <option value="Inactive">Inactive (ระงับการใช้งาน)</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>
-                    กำหนดรหัสผ่านใหม่ 
-                    <span style="color: #94a3b8; font-size: 11px; font-weight: 400; margin-left: 5px;">
-                        (เว้นว่างหากไม่ต้องการเปลี่ยน / สร้างใหม่ default คือรหัสพนักงาน)
-                    </span>
-                </label>
-                <input type="password" placeholder="••••••••">
+                <label>กำหนดรหัสผ่านใหม่ <span style="color: #94a3b8; font-size: 11px; font-weight: 400; margin-left: 5px;">(เว้นว่างหากไม่ต้องการเปลี่ยน)</span></label>
+                <input type="password" id="empPassword" placeholder="••••••••">
             </div>
 
             <div class="modal-actions" style="margin-top: 25px;">
                 <button class="btn btn-outline" onclick="closeAddUserModal()">ยกเลิก</button>
-                <button class="btn btn-primary">บันทึกข้อมูล</button>
+                <button class="btn btn-primary" onclick="saveUser()">บันทึกข้อมูล</button>
             </div>
         </div>
     </div>
+
     <div id="addDeptModal" class="modal-overlay">
         <div class="modal-content" style="width: 400px;">
             <h3>เพิ่มแผนกใหม่</h3>
@@ -278,28 +276,64 @@
                 <input type="text" id="deptNameInput" placeholder="ระบุชื่อแผนก เช่น IT, HR">
             </div>
             <div class="modal-actions">
-            <button class="btn btn-outline" onclick="closeAddDeptModal()">ยกเลิก</button>
-            <button class="btn btn-primary" onclick="saveDepartment()">บันทึกข้อมูล</button>
+                <button class="btn btn-outline" onclick="closeAddDeptModal()">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="saveDepartment()">บันทึกข้อมูล</button>
             </div>
         </div>
     </div>
+
+    <div id="editDeptModal" class="modal-overlay">
+        <div class="modal-content" style="width: 400px;">
+            <h3>แก้ไขชื่อแผนก</h3>
+            <div class="form-group">
+                <label>ชื่อแผนก <span style="color: #dc2626;">*</span></label>
+                <input type="text" id="editDeptNameInput">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeEditModal()">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="confirmEdit()">บันทึกการแก้ไข</button>
+            </div>
+        </div>
+    </div>
+
     <div id="deleteConfirmModal" class="modal-overlay">
         <div class="modal-content" style="width: 400px; text-align: center;">
             <div style="font-size: 50px; color: var(--primary); margin-bottom: 15px;">
                 <i class="fa-solid fa-circle-exclamation"></i>
             </div>
-            
             <h3 style="border: none; padding-bottom: 0; margin-bottom: 10px; font-size: 20px;">ยืนยันการลบข้อมูล?</h3>
-            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">
-                คุณแน่ใจหรือไม่ว่าต้องการลบแผนกนี้?
+            <p id="deleteConfirmText" style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">
+                คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?
             </p>
-            
             <div class="modal-actions" style="justify-content: center; gap: 15px;">
                 <button class="btn btn-outline" onclick="closeDeleteModal()">ยกเลิก</button>
                 <button class="btn btn-primary" onclick="confirmDelete()">ลบข้อมูล</button>
             </div>
         </div>
     </div>
+    <div id="csvImportModal" class="modal-overlay">
+        <div class="modal-content" style="width: 480px; text-align: center;">
+            <h3 style="border-bottom: none; padding-bottom: 0; margin-bottom: 5px;">Import CSV</h3>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+                ไฟล์ต้องมีคอลัมน์: EmployeeID, FullName, Email, DeptName
+            </p>
+
+            <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleFileSelect(event)">
+
+            <div id="csvDropZone" onclick="document.getElementById('csvFileInput').click()" 
+                 style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px 20px; cursor: pointer; transition: 0.3s; background: #f8fafc;">
+                <i class="fa-solid fa-file-csv" style="font-size: 40px; color: #22c55e; margin-bottom: 15px;"></i>
+                <p id="csvFileName" style="color: var(--text-main); font-weight: 500; font-size: 15px;">คลิกเพื่อเลือกไฟล์ .csv</p>
+            </div>
+
+            <div class="modal-actions" style="margin-top: 25px; justify-content: flex-end;">
+                <button class="btn btn-outline" onclick="closeCsvModal()">ยกเลิก</button>
+                <button class="btn btn-primary" style="background: #4f46e5; border: none;" onclick="processCSV()">อัปโหลด</button>
+            </div>
+        </div>
+    </div>
+
     <script src="admin.js"></script>
+
 </body>
 </html>
