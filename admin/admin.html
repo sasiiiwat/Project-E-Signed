@@ -75,8 +75,8 @@
                     <div class="card">
                         <div class="card-info">
                             <p>แผนกทั้งหมด</p>
-                            <h3>0</h3>
-                            <span class="text-gray">ยังไม่ได้ตั้งค่าแผนก</span>
+                            <h3 id="dashboardDeptCount">0</h3>
+                            <span id="dashboardDeptText" class="text-gray">ยังไม่ได้ตั้งค่าแผนก</span>
                         </div>
                         <div class="card-icon bg-purple"><i class="fa-regular fa-building"></i></div>
                     </div>
@@ -189,26 +189,19 @@
                     </button>
                 </div>
 
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 10%;">#</th>
-                                <th style="width: 70%;">ชื่อแผนก</th>
-                                <th style="width: 20%; text-align: center;">จัดการ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="3" style="text-align: center; padding: 60px 20px;">
-                                    <i class="fa-regular fa-building" style="font-size: 48px; color: #e2e8f0; margin-bottom: 15px; display: block;"></i>
-                                    <p style="color: var(--text-muted); font-size: 15px; font-weight: 500;">ยังไม่มีข้อมูลแผนกในระบบ</p>
-                                    <p style="color: #94a3b8; font-size: 13px; margin-top: 5px;">คลิกที่ปุ่ม "เพิ่มแผนกใหม่" ด้านบนมุมขวาเพื่อเริ่มต้น</p>
-                                </td>
-                            </tr>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">#</th>
+                            <th style="width: 70%;">ชื่อแผนก</th>
+                            <th style="width: 20%; text-align: center;">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deptTableBody">
                         </tbody>
-                    </table>
-                </div>
+                </table>
+            </div>
                 
             </section>
 
@@ -216,42 +209,65 @@
     </main>
 
     <div id="addUserModal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 550px;">
             <h3>เพิ่มพนักงานใหม่</h3>
-            <form>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>รหัสพนักงาน <span class="text-red">*</span></label>
-                        <input type="text" placeholder="IEMT001">
-                    </div>
-                    <div class="form-group">
-                        <label>แผนก</label>
-                        <select><option>-- เลือกแผนก --</option><option>IT</option><option>Manager</option></select>
-                    </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>รหัสพนักงาน <span style="color: #dc2626;">*</span></label>
+                    <input type="text" placeholder="IEMT001">
                 </div>
                 <div class="form-group">
-                    <label>ชื่อ-นามสกุล <span class="text-red">*</span></label>
-                    <input type="text" placeholder="สมชาย ใจดี">
+                    <label>แผนก</label>
+                    <select>
+                        <option>-- เลือกแผนก --</option>
+                        <option>Manager</option>
+                        <option>IT</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>ชื่อ-นามสกุล <span style="color: #dc2626;">*</span></label>
+                <input type="text" placeholder="สมชาย ใจดี">
+            </div>
+
+            <div class="form-group">
+                <label>อีเมล <span style="color: #dc2626;">*</span></label>
+                <input type="email" placeholder="user@example.com">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>สิทธิ์การใช้งาน</label>
+                    <select>
+                        <option>User (ผู้ใช้งานทั่วไป)</option>
+                        <option>Admin (ผู้ดูแลระบบ)</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label>อีเมล <span class="text-red">*</span></label>
-                    <input type="email" placeholder="user@example.com">
+                    <label>สถานะ</label>
+                    <select>
+                        <option>Active (ใช้งานปกติ)</option>
+                        <option>Inactive (ระงับการใช้งาน)</option>
+                    </select>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>สิทธิ์การใช้งาน</label>
-                        <select><option>User (ผู้ใช้งานทั่วไป)</option><option>Admin</option></select>
-                    </div>
-                    <div class="form-group">
-                        <label>สถานะ</label>
-                        <select><option>Active (ใช้งานปกติ)</option><option>Inactive</option></select>
-                    </div>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-outline" onclick="closeModal()">ยกเลิก</button>
-                    <button type="button" class="btn btn-primary">บันทึกข้อมูล</button>
-                </div>
-            </form>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    กำหนดรหัสผ่านใหม่ 
+                    <span style="color: #94a3b8; font-size: 11px; font-weight: 400; margin-left: 5px;">
+                        (เว้นว่างหากไม่ต้องการเปลี่ยน / สร้างใหม่ default คือรหัสพนักงาน)
+                    </span>
+                </label>
+                <input type="password" placeholder="••••••••">
+            </div>
+
+            <div class="modal-actions" style="margin-top: 25px;">
+                <button class="btn btn-outline" onclick="closeAddUserModal()">ยกเลิก</button>
+                <button class="btn btn-primary">บันทึกข้อมูล</button>
+            </div>
         </div>
     </div>
     <div id="addDeptModal" class="modal-overlay">
@@ -259,7 +275,7 @@
             <h3>เพิ่มแผนกใหม่</h3>
             <div class="form-group">
                 <label>ชื่อแผนก <span style="color: #dc2626;">*</span></label>
-                <input type="text" id="deptNameInput" placeholder="ระบุชื่อแผนก เช่น Manager, IT, HR">
+                <input type="text" id="deptNameInput" placeholder="ระบุชื่อแผนก เช่น IT, HR">
             </div>
             <div class="modal-actions">
             <button class="btn btn-outline" onclick="closeAddDeptModal()">ยกเลิก</button>
@@ -267,7 +283,23 @@
             </div>
         </div>
     </div>
-
+    <div id="deleteConfirmModal" class="modal-overlay">
+        <div class="modal-content" style="width: 400px; text-align: center;">
+            <div style="font-size: 50px; color: var(--primary); margin-bottom: 15px;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            
+            <h3 style="border: none; padding-bottom: 0; margin-bottom: 10px; font-size: 20px;">ยืนยันการลบข้อมูล?</h3>
+            <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">
+                คุณแน่ใจหรือไม่ว่าต้องการลบแผนกนี้?
+            </p>
+            
+            <div class="modal-actions" style="justify-content: center; gap: 15px;">
+                <button class="btn btn-outline" onclick="closeDeleteModal()">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="confirmDelete()">ลบข้อมูล</button>
+            </div>
+        </div>
+    </div>
     <script src="admin.js"></script>
 </body>
 </html>

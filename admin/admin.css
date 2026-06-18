@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. Variables & Fonts (ตั้งค่าตัวแปรและฟอนต์)
+   ========================================================================== */
 :root {
     --primary: #dc2626; /* แดง Isuzu */
     --primary-light: #fef2f2;
@@ -8,31 +11,72 @@
     --border-color: #e2e8f0;
 }
 
-/* นำเข้าฟอนต์ Prompt กลับมา */
 @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
 
+
+/* ==========================================================================
+   2. Base & Reset (รีเซ็ตค่าพื้นฐานของเว็บ)
+   ========================================================================== */
 * { 
     margin: 0; 
     padding: 0; 
     box-sizing: border-box; 
 }
 
-/* บังคับใช้ Prompt ทุกส่วน */
+/* บังคับใช้ Prompt และสีข้อความหลัก ทุกส่วน */
 body, h1, h2, h3, h4, h5, h6, p, span, a, div, td, th, button, input, select, textarea { 
     font-family: 'Prompt', sans-serif;
     color: var(--text-main); 
 }
 
+/* ตั้งค่าพื้นหลังและโครงสร้างหลักไม่ให้มี Scrollbar ซ้อนกัน */
 body {
     background-color: var(--bg-color); 
     display: flex; 
     height: 100vh; 
     overflow: hidden; 
 }
-/* --------------------------------- Sidebar --------------------------------- */
-.sidebar { width: var(--sidebar-width); background: #ffffff; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+
+
+/* ==========================================================================
+   3. Layout Structure (โครงสร้างหน้าจอหลัก)
+   ========================================================================== */
+.sidebar { 
+    width: var(--sidebar-width); 
+    background: #ffffff; 
+    border-right: 1px solid var(--border-color); 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.main-content { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+}
+
+.content-wrapper { 
+    padding: 30px 40px; 
+    overflow-y: auto; 
+    flex: 1; 
+}
+
+.content-section { 
+    display: none; 
+    animation: fadeIn 0.3s ease; 
+}
+
+.content-section.active { 
+    display: block; 
+}
+
+
+/* ==========================================================================
+   4. Sidebar & Navigation (เมนูด้านซ้าย)
+   ========================================================================== */
 .sidebar-header { 
-    height: 80px; /* ล็อกความสูงไว้ที่ 80px */
+    height: 80px; 
     padding: 0 30px; 
     border-bottom: 1px solid var(--border-color); 
     display: flex;
@@ -41,28 +85,26 @@ body {
 }
 
 .logo-img { 
-    width: 100%; /* สั่งให้กว้างตามพื้นที่ช่อง */
-    max-width: 130px; /* จำกัดความกว้างสูงสุด โลโก้จะได้ไม่ใหญ่เกินไปและมีขอบซ้ายขวาเหลือสวยๆ */
-    height: auto; /* ปรับความสูงอัตโนมัติไม่ให้รูปเบี้ยว */
+    width: 100%; 
+    max-width: 130px; 
+    height: auto; 
     object-fit: contain; 
 }
 
 .menu-label { 
     padding: 20px 30px 10px; 
-    font-size: 14px; /* ปรับขนาดให้ใหญ่ขึ้น (จากเดิม 12px) */
+    font-size: 14px; 
     color: var(--text-muted); 
     font-weight: 600; 
-    letter-spacing: 0.5px; /* เพิ่มช่องไฟตัวอักษรนิดนึงให้ดูเป็นหัวข้อที่สบายตา */
+    letter-spacing: 0.5px; 
 }
 
-/* --------------------------------- Sidebar Menu (Modern UI Redesign - Icon Fix) --------------------------------- */
 .sidebar-menu { 
     list-style: none; 
     flex: 1; 
     padding-top: 15px; 
 }
 
-/* 1. สภาวะปกติ (ยังไม่กด) */
 .sidebar-menu li { 
     margin: 5px 20px; 
     padding: 12px 20px; 
@@ -75,14 +117,12 @@ body {
     background: transparent;
 }
 
-/* ตั้งค่าสีเทา */
 .sidebar-menu li i,
 .sidebar-menu li span {
     color: #64748b; 
     transition: all 0.3s ease;
 }
 
-/* กำหนดความหนาเฉพาะ "ตัวหนังสือ" เท่านั้น */
 .sidebar-menu li span {
     font-size: 15px;
     font-weight: 500; 
@@ -90,7 +130,6 @@ body {
     line-height: 1.5;
 }
 
-/* ตำแหน่งไอคอน (ปล่อย font-weight ไว้ตามธรรมชาติของมัน) */
 .sidebar-menu li i { 
     font-size: 18px; 
     width: 20px; 
@@ -98,69 +137,123 @@ body {
     margin-top: 4px; 
 }
 
-/* 2. เมื่อเอาเมาส์ไปชี้ (Hover) */
 .sidebar-menu li:hover { 
     background: #f8fafc; 
     transform: translateX(6px); 
 }
+
 .sidebar-menu li:hover i,
 .sidebar-menu li:hover span { 
     color: var(--primary); 
 }
 
-/* 3. เมื่อกดเลือก (Active) */
 .sidebar-menu li.active { 
     background: var(--primary); 
     box-shadow: 0 4px 15px rgba(220, 38, 38, 0.25); 
     transform: translateX(6px); 
 }
 
-/* เปลี่ยนสีเป็นขาวทั้งคู่ แต่ไม่กำหนดความหนาตรงนี้แล้ว! */
 .sidebar-menu li.active i,
 .sidebar-menu li.active span { 
     color: #ffffff; 
 }
 
-/* เพิ่มความหนาให้เฉพาะตัวหนังสือตอนที่ Active */
 .sidebar-menu li.active span {
     font-weight: 600; 
 }
-/* --------------------------------- Main Content --------------------------------- */
-.main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+
+/* ==========================================================================
+   5. Top Header & User Profile (แถบด้านบน และ เมนูโปรไฟล์)
+   ========================================================================== */
 .top-header { 
     background: #ffffff; 
-    height: 80px; /* ล็อกความสูงให้เท่ากับฝั่งซ้ายเป๊ะๆ */
+    height: 80px; 
     padding: 0 40px; 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    border-bottom: 1px solid var(--border-color); /* ใช้เส้นขอบแบบเดียวกันเพื่อให้ต่อกันเนียนๆ */
+    border-bottom: 1px solid var(--border-color); 
     z-index: 10; 
 }
+
 .top-header h2 { font-size: 20px; font-weight: 600; }
 
-.user-profile { display: flex; align-items: center; gap: 15px; }
+.user-profile-container { position: relative; }
+
+.user-profile { 
+    display: flex; 
+    align-items: center; 
+    gap: 15px; 
+    cursor: pointer; 
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.user-profile:hover { background: #f1f5f9; }
+
 .user-info { text-align: right; line-height: 1.2; }
 .user-info strong { display: block; font-size: 14px; }
 .user-info span { font-size: 11px; color: var(--text-muted); }
+
 .avatar { 
     width: 40px; 
     height: 40px; 
-    background: #fef2f2; /* เปลี่ยนพื้นหลังเป็นสีแดงอ่อน */
-    color: #dc2626;      /* เปลี่ยนไอคอนเป็นสีแดง Isuzu */
+    background: #fef2f2; 
+    color: #dc2626;      
     border-radius: 50%; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
     font-size: 18px; 
 }
-.content-wrapper { padding: 30px 40px; overflow-y: auto; flex: 1; }
-.content-section { display: none; animation: fadeIn 0.3s ease; }
-.content-section.active { display: block; }
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* กล่อง Dropdown Profile */
+.profile-dropdown {
+    position: absolute;
+    top: 120%; 
+    right: 0;
+    background: white;
+    min-width: 220px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border: 1px solid var(--border-color);
+    display: none; 
+    flex-direction: column;
+    z-index: 100;
+    animation: fadeInDown 0.2s ease;
+}
 
-/* --------------------------------- Dashboard Cards --------------------------------- */
+.profile-dropdown.show { display: flex; }
+
+.dropdown-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.dropdown-header strong { display: block; font-size: 14px; color: var(--text-main); margin-bottom: 2px; }
+.dropdown-header .role-text { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+.dropdown-header .email-text { font-size: 12px; color: #94a3b8; }
+
+.dropdown-footer { padding: 8px 0; }
+
+.logout-link {
+    display: block;
+    padding: 10px 20px;
+    color: #dc2626; 
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.logout-link:hover { background: #fef2f2; }
+
+
+/* ==========================================================================
+   6. Dashboard Cards (การ์ดแสดงสถิติ)
+   ========================================================================== */
 .stat-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
 .card { background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: flex-start; }
 .card-info p { font-size: 14px; color: var(--text-muted); margin-bottom: 5px; }
@@ -168,14 +261,11 @@ body {
 .card-info span { font-size: 12px; font-weight: 500; }
 
 .card-icon { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-.bg-blue { background: #eff6ff; color: #3b82f6; }
-.bg-purple { background: #f5f3ff; color: #8b5cf6; }
-.bg-orange { background: #fff7ed; color: #f97316; }
-.bg-yellow { background: #fefce8; color: #eab308; }
-.text-green { color: #22c55e; } .text-gray { color: #94a3b8; } .text-red { color: #dc2626; }
-.fw-bold { font-weight: bold; }
 
-/* --------------------------------- Tables & Containers --------------------------------- */
+
+/* ==========================================================================
+   7. Tables & Badges (ตารางข้อมูล และ ป้ายสถานะ)
+   ========================================================================== */
 .table-container { background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid var(--border-color); }
 .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .view-all { color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 500; }
@@ -188,9 +278,13 @@ body {
 .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
 .status-badge.success { color: #22c55e; background: #f0fdf4; }
 
-/* --------------------------------- Buttons & Inputs --------------------------------- */
+
+/* ==========================================================================
+   8. Buttons & Inputs (ปุ่มกด และ ช่องค้นหา)
+   ========================================================================== */
 .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
 .header-actions { display: flex; gap: 10px; }
+
 .btn { padding: 10px 20px; border-radius: 8px; font-family: 'Prompt'; font-size: 14px; font-weight: 500; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; }
 .btn-primary { background: var(--primary); color: white; }
 .btn-outline-green { background: transparent; border: 1px solid #22c55e; color: #22c55e; }
@@ -201,76 +295,44 @@ body {
 .search-bar input { width: 100%; padding: 12px 15px 12px 40px; border: 1px solid var(--border-color); border-radius: 8px; background: #f8fafc; font-family: 'Prompt'; outline: none; }
 
 .icon-btn { background: transparent; border: none; font-size: 16px; cursor: pointer; padding: 5px; margin-right: 5px; }
-.icon-btn.edit { color: #3b82f6; } .icon-btn.delete { color: #dc2626; }
+.icon-btn.edit { color: #3b82f6; } 
+.icon-btn.delete { color: #dc2626; }
 
-/* --------------------------------- Modal Form --------------------------------- */
+
+/* ==========================================================================
+   9. Modal Forms (หน้าต่างป๊อปอัป)
+   ========================================================================== */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
 .modal-content { background: white; padding: 30px; border-radius: 16px; width: 500px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
 .modal-content h3 { margin-bottom: 20px; font-size: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+
 .form-row { display: flex; gap: 15px; }
 .form-group { flex: 1; margin-bottom: 15px; }
 .form-group label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
 .form-group input, .form-group select { width: 100%; padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 8px; font-family: 'Prompt'; font-size: 14px; outline: none; }
 .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
-/* --------------------------------- User Dropdown --------------------------------- */
-.user-profile-container {
-    position: relative;
-}
 
-/* ทำให้โปรไฟล์มีรูปเมาส์กดได้ และเปลี่ยนสีเวลานำเมาส์ไปชี้ */
-.user-profile { 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-    cursor: pointer; 
-    padding: 6px 12px;
-    border-radius: 8px;
-    transition: background 0.3s;
-}
-.user-profile:hover { background: #f1f5f9; }
 
-/* กล่อง Dropdown ที่ซ่อนอยู่ */
-.profile-dropdown {
-    position: absolute;
-    top: 120%; /* ให้อยู่ใต้โปรไฟล์พอดี */
-    right: 0;
-    background: white;
-    min-width: 220px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    border: 1px solid var(--border-color);
-    display: none; /* ซ่อนไว้เริ่มต้น */
-    flex-direction: column;
-    z-index: 100;
-    animation: fadeInDown 0.2s ease;
-}
+/* ==========================================================================
+   10. Utility Classes & Animations (คลาสตัวช่วย และ อนิเมชั่น)
+   ========================================================================== */
+.bg-blue { background: #eff6ff; color: #3b82f6; }
+.bg-purple { background: #f5f3ff; color: #8b5cf6; }
+.bg-orange { background: #fff7ed; color: #f97316; }
+.bg-yellow { background: #fefce8; color: #eab308; }
 
-/* คลาสสำหรับโชว์กล่อง */
-.profile-dropdown.show { display: flex; }
+.text-green { color: #22c55e; } 
+.text-gray { color: #94a3b8; } 
+.text-red { color: #dc2626; }
+.fw-bold { font-weight: bold; }
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
 
 @keyframes fadeInDown {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
-
-/* ตกแต่งเนื้อหาข้างในกล่อง */
-.dropdown-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid var(--border-color);
-}
-.dropdown-header strong { display: block; font-size: 14px; color: var(--text-main); margin-bottom: 2px; }
-.dropdown-header .role-text { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
-.dropdown-header .email-text { font-size: 12px; color: #94a3b8; }
-
-.dropdown-footer { padding: 8px 0; }
-.logout-link {
-    display: block;
-    padding: 10px 20px;
-    color: #dc2626; /* ตัวหนังสือสีแดงแบบในรูป */
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 500;
-    transition: background 0.2s;
-}
-.logout-link:hover { background: #fef2f2; }
