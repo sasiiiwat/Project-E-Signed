@@ -17,7 +17,7 @@
             <img src="../Photo/Isuzu.png" alt="Logo" class="logo-img">
         </div>
 
-        <div class="menu-label">ผู้ดูแลระบบ</div>
+        <div class="menu-label" data-i18n="sidebar_admin">ผู้ดูแลระบบ</div>
         <ul class="sidebar-menu">
             <li class="active" onclick="switchTab('dashboard', this)">
                 <i class="fa-solid fa-border-all"></i> <span data-i18n="menu_dashboard">ภาพรวมระบบ</span>
@@ -65,7 +65,7 @@
                             <p class="email-text">admin@isuzu.com</p>
                         </div>
                         <div class="dropdown-footer">
-                            <a href="../login/login.html" class="logout-link">ออกจากระบบ</a>
+                            <a href="../login/login.html" class="logout-link" data-i18n="logout">ออกจากระบบ</a>
                         </div>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                     <div class="table-header">
                         <div class="search-bar">
                             <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="searchInput" placeholder="ค้นหาชื่อ, รหัสพนักงาน หรืออีเมล..." oninput="renderUsers()">
+                            <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="ค้นหาชื่อ, รหัสพนักงาน หรืออีเมล..." oninput="renderUsers()">
                         </div>
                     </div>
                     <table class="data-table">
@@ -204,25 +204,25 @@
                     <h3 data-i18n="title_smtp">ตั้งค่าการส่งเมล (SMTP)</h3>
                     <p class="sub-text mb-4" data-i18n="desc_smtp">กำหนดค่า Email Server สำหรับระบบแจ้งเตือนอัตโนมัติ</p>
                     <div style="padding: 20px; border: 1px dashed #ccc; border-radius: 8px; text-align: center; color: #666;">
-                        (พื้นที่สำหรับใส่ฟอร์ม SMTP ตามในรูปภาพ)
                     </div>
                 </div>
             </section>
 
         </div> 
+    </main> 
 
     <div id="addUserModal" class="modal-overlay">
         <div class="modal-content" style="width: 550px;">
-            <h3 id="userModalTitle">เพิ่มพนักงานใหม่</h3>
+            <h3 id="userModalTitle" data-i18n="modal_add_user_title">เพิ่มพนักงานใหม่</h3>
             <input type="hidden" id="editUserIndex" value=""> 
             
             <div class="form-row">
                 <div class="form-group">
-                    <label>รหัสพนักงาน <span style="color: #dc2626;">*</span></label>
-                    <input type="text" id="empId" placeholder="IEMT001">
+                    <label><span data-i18n="label_emp_id">รหัสพนักงาน</span> <span style="color: #dc2626;">*</span></label>
+                    <input type="text" id="empId" data-i18n-placeholder="placeholder_emp_id" placeholder="IEMT001">
                 </div>
                 <div class="form-group">
-                    <label>แผนก <span style="color: #dc2626;">*</span></label>
+                    <label><span data-i18n="label_dept">แผนก</span> <span style="color: #dc2626;">*</span></label>
                     <select id="empDept">
                         <option value="">-- เลือกแผนก --</option>
                     </select>
@@ -230,91 +230,95 @@
             </div>
 
             <div class="form-group">
-                <label>ชื่อ-นามสกุล <span style="color: #dc2626;">*</span></label>
-                <input type="text" id="empName" placeholder="สมชาย ใจดี">
+                <label><span data-i18n="label_fullname">ชื่อ-นามสกุล</span> <span style="color: #dc2626;">*</span></label>
+                <input type="text" id="empName" data-i18n-placeholder="placeholder_fullname" placeholder="สมชาย ใจดี">
             </div>
 
             <div class="form-group">
-                <label>อีเมล <span style="color: #dc2626;">*</span></label>
+                <label><span data-i18n="label_email">อีเมล</span> <span style="color: #dc2626;">*</span></label>
                 <input type="email" id="empEmail" placeholder="user@example.com">
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>สิทธิ์การใช้งาน</label>
+                    <label data-i18n="label_role">สิทธิ์การใช้งาน</label>
                     <select id="empRole">
-                        <option value="User">User (ผู้ใช้งานทั่วไป)</option>
-                        <option value="Admin">Admin (ผู้ดูแลระบบ)</option>
+                        <option value="User" data-i18n="role_user">User (ผู้ใช้งานทั่วไป)</option>
+                        <option value="Admin" data-i18n="role_admin">Admin (ผู้ดูแลระบบ)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>สถานะ</label>
+                    <label data-i18n="label_status">สถานะ</label>
                     <select id="empStatus">
-                        <option value="Active">Active (ใช้งานปกติ)</option>
-                        <option value="Inactive">Inactive (ระงับการใช้งาน)</option>
+                        <option value="Active" data-i18n="status_active">Active (ใช้งานปกติ)</option>
+                        <option value="Inactive" data-i18n="status_inactive">Inactive (ระงับการใช้งาน)</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-group">
-                <label>กำหนดรหัสผ่านใหม่ <span style="color: #94a3b8; font-size: 11px; font-weight: 400; margin-left: 5px;">(เว้นว่างหากไม่ต้องการเปลี่ยน)</span></label>
+                <label><span data-i18n="label_password">กำหนดรหัสผ่านใหม่</span> <span style="color: #94a3b8; font-size: 11px; font-weight: 400; margin-left: 5px;" data-i18n="password_hint">(เว้นว่างหากไม่ต้องการเปลี่ยน)</span></label>
                 <input type="password" id="empPassword" placeholder="••••••••">
             </div>
 
             <div class="modal-actions" style="margin-top: 25px;">
-                <button class="btn btn-outline" onclick="closeAddUserModal()">ยกเลิก</button>
-                <button class="btn btn-primary" onclick="saveUser()">บันทึกข้อมูล</button>
+                <button class="btn btn-outline" onclick="closeAddUserModal()" data-i18n="btn_cancel">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="saveUser()" data-i18n="btn_save">บันทึกข้อมูล</button>
             </div>
         </div>
     </div>
 
     <div id="addDeptModal" class="modal-overlay">
         <div class="modal-content" style="width: 400px;">
-            <h3>เพิ่มแผนกใหม่</h3>
+            <h3 data-i18n="modal_add_dept_title">เพิ่มแผนกใหม่</h3>
             <div class="form-group">
-                <label>ชื่อแผนก <span style="color: #dc2626;">*</span></label>
-                <input type="text" id="deptNameInput" placeholder="ระบุชื่อแผนก เช่น IT, HR">
+                <label><span data-i18n="label_dept_name">ชื่อแผนก</span> <span style="color: #dc2626;">*</span></label>
+                <input type="text" id="deptNameInput" data-i18n-placeholder="placeholder_dept_name" placeholder="ระบุชื่อแผนก เช่น IT, HR">
             </div>
             <div class="modal-actions">
-                <button class="btn btn-outline" onclick="closeAddDeptModal()">ยกเลิก</button>
-                <button class="btn btn-primary" onclick="saveDepartment()">บันทึกข้อมูล</button>
+                <button class="btn btn-outline" onclick="closeAddDeptModal()" data-i18n="btn_cancel">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="saveDepartment()" data-i18n="btn_save">บันทึกข้อมูล</button>
             </div>
         </div>
     </div>
 
     <div id="editDeptModal" class="modal-overlay">
         <div class="modal-content" style="width: 400px;">
-            <h3>แก้ไขชื่อแผนก</h3>
+            <h3 data-i18n="modal_edit_dept_title">แก้ไขชื่อแผนก</h3>
             <div class="form-group">
-                <label>ชื่อแผนก <span style="color: #dc2626;">*</span></label>
+                <label><span data-i18n="label_dept_name">ชื่อแผนก</span> <span style="color: #dc2626;">*</span></label>
                 <input type="text" id="editDeptNameInput">
             </div>
             <div class="modal-actions">
-                <button class="btn btn-outline" onclick="closeEditModal()">ยกเลิก</button>
-                <button class="btn btn-primary" onclick="confirmEdit()">บันทึกการแก้ไข</button>
+                <button class="btn btn-outline" onclick="closeEditModal()" data-i18n="btn_cancel">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="confirmEdit()" data-i18n="btn_save">บันทึกการแก้ไข</button>
             </div>
         </div>
     </div>
 
+    <!-- =========================================
+         หน้าต่างป๊อปอัป: ยืนยันการลบข้อมูล
+    ========================================= -->
     <div id="deleteConfirmModal" class="modal-overlay">
         <div class="modal-content" style="width: 400px; text-align: center;">
             <div style="font-size: 50px; color: var(--primary); margin-bottom: 15px;">
                 <i class="fa-solid fa-circle-exclamation"></i>
             </div>
-            <h3 style="border: none; padding-bottom: 0; margin-bottom: 10px; font-size: 20px;">ยืนยันการลบข้อมูล?</h3>
+            <h3 style="border: none; padding-bottom: 0; margin-bottom: 10px; font-size: 20px;" data-i18n="modal_del_title">ยืนยันการลบข้อมูล?</h3>
             <p id="deleteConfirmText" style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px;">
                 คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?
             </p>
             <div class="modal-actions" style="justify-content: center; gap: 15px;">
-                <button class="btn btn-outline" onclick="closeDeleteModal()">ยกเลิก</button>
-                <button class="btn btn-primary" onclick="confirmDelete()">ลบข้อมูล</button>
+                <!-- เติม data-i18n ให้ปุ่มทั้งสองอัน -->
+                <button class="btn btn-outline" onclick="closeDeleteModal()" data-i18n="btn_cancel">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="confirmDelete()" data-i18n="btn_delete">ลบข้อมูล</button>
             </div>
         </div>
     </div>
     <div id="csvImportModal" class="modal-overlay">
         <div class="modal-content" style="width: 480px; text-align: center;">
-            <h3 style="border-bottom: none; padding-bottom: 0; margin-bottom: 5px;">Import CSV</h3>
-            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+            <h3 style="border-bottom: none; padding-bottom: 0; margin-bottom: 5px;" data-i18n="csv_title">Import CSV</h3>
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;" data-i18n="csv_desc">
                 ไฟล์ต้องมีคอลัมน์: EmployeeID, FullName, Email, DeptName
             </p>
 
@@ -323,12 +327,12 @@
             <div id="csvDropZone" onclick="document.getElementById('csvFileInput').click()" 
                  style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px 20px; cursor: pointer; transition: 0.3s; background: #f8fafc;">
                 <i class="fa-solid fa-file-csv" style="font-size: 40px; color: #22c55e; margin-bottom: 15px;"></i>
-                <p id="csvFileName" style="color: var(--text-main); font-weight: 500; font-size: 15px;">คลิกเพื่อเลือกไฟล์ .csv</p>
+                <p id="csvFileName" style="color: var(--text-main); font-weight: 500; font-size: 15px;" data-i18n="csv_drop_text">คลิกเพื่อเลือกไฟล์ .csv</p>
             </div>
 
             <div class="modal-actions" style="margin-top: 25px; justify-content: flex-end;">
-                <button class="btn btn-outline" onclick="closeCsvModal()">ยกเลิก</button>
-                <button class="btn btn-primary" style="background: #4f46e5; border: none;" onclick="processCSV()">อัปโหลด</button>
+                <button class="btn btn-outline" onclick="closeCsvModal()" data-i18n="btn_cancel">ยกเลิก</button>
+                <button class="btn btn-primary" onclick="processCSV()" data-i18n="btn_upload">อัปโหลด</button>
             </div>
         </div>
     </div>

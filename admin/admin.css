@@ -175,6 +175,7 @@ body {
     align-items: center; 
     border-bottom: 1px solid var(--border-color); 
     z-index: 10; 
+    position: relative; /* 🔥 เติมบรรทัดนี้เข้าไปครับ 🔥 */
 }
 
 .top-header h2 { font-size: 20px; font-weight: 600; }
@@ -287,6 +288,7 @@ body {
 
 .btn { padding: 10px 20px; border-radius: 8px; font-family: 'Prompt'; font-size: 14px; font-weight: 500; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; }
 .btn-primary { background: var(--primary); color: white; }
+.btn-primary span, .btn-primary i { color: white !important; }
 .btn-outline-green { background: transparent; border: 1px solid #22c55e; color: #22c55e; }
 .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
 
@@ -335,4 +337,52 @@ body {
 @keyframes fadeInDown {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+/* ==========================================================================
+   11. Toast Notifications (ป๊อปอัปแจ้งเตือนมุมจอ)
+   ========================================================================== */
+.toast-container {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.toast {
+    background: white;
+    border-left: 4px solid var(--primary);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 16px 24px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 320px;
+    animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.toast.success { border-left-color: #22c55e; }
+.toast.error { border-left-color: #dc2626; }
+.toast.warning { border-left-color: #f59e0b; }
+
+.toast-icon { font-size: 24px; }
+.toast.success .toast-icon { color: #22c55e; }
+.toast.error .toast-icon { color: #dc2626; }
+.toast.warning .toast-icon { color: #f59e0b; }
+
+.toast-content { flex: 1; }
+.toast-title { font-weight: 600; font-size: 15px; margin-bottom: 3px; color: var(--text-main); }
+.toast-message { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+
+@keyframes slideInRight {
+    from { transform: translateX(120%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(120%); opacity: 0; }
 }
