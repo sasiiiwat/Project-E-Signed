@@ -180,7 +180,7 @@
                     <div class="table-header">
                         <div class="search-bar">
                             <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="ค้นหาชื่อ, รหัสพนักงาน หรืออีเมล..." oninput="renderUsers()">
+                            <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="ค้นหาชื่อ, รหัสพนักงาน หรืออีเมล..." oninput="currentUserPage = 1; renderUsers()">
                         </div>
                     </div>
                     <table class="data-table">
@@ -196,6 +196,7 @@
                         <tbody id="userTableBody">
                             </tbody>
                     </table>
+                    <div id="userPagination" class="pagination"></div>
                 </div>
             </section>
 

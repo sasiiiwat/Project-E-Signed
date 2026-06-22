@@ -259,6 +259,9 @@ function populateDeptDropdown() {
     });
 }
 
+let currentUserPage = 1;      
+const usersPerPage = 5;       
+
 function renderUsers() {
     const tbody = document.getElementById('userTableBody');
     if (!tbody) return;
@@ -276,6 +279,7 @@ function renderUsers() {
                     <p style="color: var(--text-muted); font-size: 15px; font-weight: 500;">${translations[lang].empty_users}</p>
                 </td>
             </tr>`;
+        document.getElementById('userPagination').innerHTML = ''; 
         updateDashboardUsers(0);
         return;
     }
@@ -296,11 +300,21 @@ function renderUsers() {
                     <p style="color: var(--text-muted); font-size: 15px; font-weight: 500;">${notFoundText}</p>
                 </td>
             </tr>`;
+        document.getElementById('userPagination').innerHTML = ''; 
         return;
     }
     
+    // --- ระบบแบ่งหน้า ---
+    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+    if (currentUserPage > totalPages) currentUserPage = totalPages;
+    if (currentUserPage < 1) currentUserPage = 1;
+
+    const startIndex = (currentUserPage - 1) * usersPerPage;
+    const endIndex = startIndex + usersPerPage;
+    const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+
     tbody.innerHTML = '';
-    filteredUsers.forEach((user) => {
+    paginatedUsers.forEach((user) => {
         const originalIndex = allUsers.findIndex(u => u.id === user.id);
         const statusBadge = user.status === 'Active' 
             ? `<span class="status-badge success">Active</span>` 
@@ -321,7 +335,39 @@ function renderUsers() {
                 </td>
             </tr>`;
     });
+    
     updateDashboardUsers(allUsers.length); 
+    renderUserPagination(filteredUsers.length, totalPages); 
+}
+
+function renderUserPagination(totalItems, totalPages) {
+    const paginationContainer = document.getElementById('userPagination');
+    if (!paginationContainer) return;
+
+    paginationContainer.innerHTML = '';
+    if (totalItems <= usersPerPage) return; 
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'page-btn';
+    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+    prevBtn.disabled = currentUserPage === 1;
+    prevBtn.onclick = () => { currentUserPage--; renderUsers(); };
+    paginationContainer.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `page-btn ${i === currentUserPage ? 'active' : ''}`;
+        pageBtn.innerText = i;
+        pageBtn.onclick = () => { currentUserPage = i; renderUsers(); };
+        paginationContainer.appendChild(pageBtn);
+    }
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'page-btn';
+    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+    nextBtn.disabled = currentUserPage === totalPages;
+    nextBtn.onclick = () => { currentUserPage++; renderUsers(); };
+    paginationContainer.appendChild(nextBtn);
 }
 
 function openAddUserModal() {
