@@ -43,7 +43,7 @@
             <div style="display: flex; align-items: center; gap: 20px;">
                 
                 <!-- 🌍 Dropdown เปลี่ยนภาษา -->
-                <select id="langSelect" onchange="changeLanguage(this.value)" style="padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Prompt'; background: #f8fafc; cursor: pointer; outline: none; font-size: 14px;">
+                <select id="langSelect" onchange="changeLanguage(this.value)" style="padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Prompt'; background: var(--input-bg); color: var(--text-main); cursor: pointer; outline: none; font-size: 14px;">
                     <option value="th">🇹🇭 TH</option>
                     <option value="en">🇬🇧 EN</option>
                     <option value="jp">🇯🇵 JP</option>
@@ -126,8 +126,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td colspan="4" style="text-align: center; padding: 40px 20px; color: #94a3b8;">
-                                    <i class="fa-regular fa-folder-open" style="font-size: 32px; margin-bottom: 15px; display: block; color: #cbd5e1;"></i>
+                                <td colspan="4" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+                                    <i class="fa-regular fa-folder-open" style="font-size: 32px; margin-bottom: 15px; display: block; color: var(--border-color);"></i>
                                     <span data-i18n="empty_docs">ยังไม่มีข้อมูลเอกสารในระบบ</span>
                                 </td>
                             </tr>
@@ -203,7 +203,7 @@
                 <div class="table-container" style="max-width: 800px; margin: 0 auto;">
                     <h3 data-i18n="title_smtp">ตั้งค่าการส่งเมล (SMTP)</h3>
                     <p class="sub-text mb-4" data-i18n="desc_smtp">กำหนดค่า Email Server สำหรับระบบแจ้งเตือนอัตโนมัติ</p>
-                    <div style="padding: 20px; border: 1px dashed #ccc; border-radius: 8px; text-align: center; color: #666;">
+                    <div style="padding: 20px; border: 1px dashed var(--border-color); border-radius: 8px; text-align: center; color: var(--text-muted);">
                     </div>
                 </div>
             </section>
@@ -218,11 +218,11 @@
             
             <div class="form-row">
                 <div class="form-group">
-                    <label><span data-i18n="label_emp_id">รหัสพนักงาน</span> <span style="color: #dc2626;">*</span></label>
+                    <label><span data-i18n="label_emp_id">รหัสพนักงาน</span> <span style="color: #f87171;">*</span></label>
                     <input type="text" id="empId" data-i18n-placeholder="placeholder_emp_id" placeholder="IEMT001">
                 </div>
                 <div class="form-group">
-                    <label><span data-i18n="label_dept">แผนก</span> <span style="color: #dc2626;">*</span></label>
+                    <label><span data-i18n="label_dept">แผนก</span> <span style="color: #f87171;">*</span></label>
                     <select id="empDept">
                         <option value="">-- เลือกแผนก --</option>
                     </select>
@@ -230,12 +230,12 @@
             </div>
 
             <div class="form-group">
-                <label><span data-i18n="label_fullname">ชื่อ-นามสกุล</span> <span style="color: #dc2626;">*</span></label>
+                <label><span data-i18n="label_fullname">ชื่อ-นามสกุล</span> <span style="color: #f87171;">*</span></label>
                 <input type="text" id="empName" data-i18n-placeholder="placeholder_fullname" placeholder="สมชาย ใจดี">
             </div>
 
             <div class="form-group">
-                <label><span data-i18n="label_email">อีเมล</span> <span style="color: #dc2626;">*</span></label>
+                <label><span data-i18n="label_email">อีเมล</span> <span style="color: #f87171;">*</span></label>
                 <input type="email" id="empEmail" placeholder="user@example.com">
             </div>
 
@@ -257,7 +257,7 @@
             </div>
 
             <div class="form-group">
-                <label><span data-i18n="label_password">กำหนดรหัสผ่านใหม่</span> <span style="color: #94a3b8; font-size: 11px; font-weight: 400; margin-left: 5px;" data-i18n="password_hint">(เว้นว่างหากไม่ต้องการเปลี่ยน)</span></label>
+                <label><span data-i18n="label_password">กำหนดรหัสผ่านใหม่</span> <span style="color: var(--text-muted); font-size: 11px; font-weight: 400; margin-left: 5px;" data-i18n="password_hint">(เว้นว่างหากไม่ต้องการเปลี่ยน)</span></label>
                 <input type="password" id="empPassword" placeholder="••••••••">
             </div>
 
@@ -272,7 +272,7 @@
         <div class="modal-content" style="width: 400px;">
             <h3 data-i18n="modal_add_dept_title">เพิ่มแผนกใหม่</h3>
             <div class="form-group">
-                <label><span data-i18n="label_dept_name">ชื่อแผนก</span> <span style="color: #dc2626;">*</span></label>
+                <label><span data-i18n="label_dept_name">ชื่อแผนก</span> <span style="color: #f87171;">*</span></label>
                 <input type="text" id="deptNameInput" data-i18n-placeholder="placeholder_dept_name" placeholder="ระบุชื่อแผนก เช่น IT, HR">
             </div>
             <div class="modal-actions">
@@ -286,7 +286,7 @@
         <div class="modal-content" style="width: 400px;">
             <h3 data-i18n="modal_edit_dept_title">แก้ไขชื่อแผนก</h3>
             <div class="form-group">
-                <label><span data-i18n="label_dept_name">ชื่อแผนก</span> <span style="color: #dc2626;">*</span></label>
+                <label><span data-i18n="label_dept_name">ชื่อแผนก</span> <span style="color: #f87171;">*</span></label>
                 <input type="text" id="editDeptNameInput">
             </div>
             <div class="modal-actions">
@@ -309,12 +309,12 @@
                 คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?
             </p>
             <div class="modal-actions" style="justify-content: center; gap: 15px;">
-                <!-- เติม data-i18n ให้ปุ่มทั้งสองอัน -->
                 <button class="btn btn-outline" onclick="closeDeleteModal()" data-i18n="btn_cancel">ยกเลิก</button>
                 <button class="btn btn-primary" onclick="confirmDelete()" data-i18n="btn_delete">ลบข้อมูล</button>
             </div>
         </div>
     </div>
+    
     <div id="csvImportModal" class="modal-overlay">
         <div class="modal-content" style="width: 480px; text-align: center;">
             <h3 style="border-bottom: none; padding-bottom: 0; margin-bottom: 5px;" data-i18n="csv_title">Import CSV</h3>
@@ -325,8 +325,8 @@
             <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleFileSelect(event)">
 
             <div id="csvDropZone" onclick="document.getElementById('csvFileInput').click()" 
-                 style="border: 2px dashed #cbd5e1; border-radius: 12px; padding: 40px 20px; cursor: pointer; transition: 0.3s; background: #f8fafc;">
-                <i class="fa-solid fa-file-csv" style="font-size: 40px; color: #22c55e; margin-bottom: 15px;"></i>
+                 style="border: 2px dashed var(--border-color); border-radius: 12px; padding: 40px 20px; cursor: pointer; transition: 0.3s; background: var(--input-bg);">
+                <i class="fa-solid fa-file-csv" style="font-size: 40px; color: #4ade80; margin-bottom: 15px;"></i>
                 <p id="csvFileName" style="color: var(--text-main); font-weight: 500; font-size: 15px;" data-i18n="csv_drop_text">คลิกเพื่อเลือกไฟล์ .csv</p>
             </div>
 
@@ -337,7 +337,7 @@
         </div>
     </div>
 
-    <script src="admin.js"></script>
+    <script src="translations.js"></script> <script src="admin.js"></script>
 
 </body>
 </html>
