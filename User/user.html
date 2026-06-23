@@ -54,8 +54,8 @@
             <h2 class="page-title" id="page-title">ภาพรวมของฉัน</h2>
             <div class="user-profile">
                 <div class="user-info">
-                    <strong>สมชาย ใจดี</strong>
-                    <span>แผนก IT | EMP001</span>
+                    <strong>ศศิวัฒน์ หวังเชย</strong>
+                    <span>แผนก Machine 1 | IEMT001</span>
                 </div>
                 <div class="avatar"><i class="fa-regular fa-user"></i></div>
             </div>
@@ -64,7 +64,7 @@
         <div class="content-wrapper">
             
             <section id="dashboard" class="content-section active">
-                <h3 style="margin-bottom: 20px;">สวัสดี, สมชาย ใจดี 👋</h3>
+                <h3 style="margin-bottom: 20px;">สวัสดี, ศศิวัฒน์ หวังเชย 👋</h3>
                 
                 <div class="stat-cards">
                     <div class="card">
@@ -78,14 +78,14 @@
                         <div class="card-icon" style="background: #f0fdf4; color: #22c55e;"><i class="fa-solid fa-check-double"></i></div>
                         <div class="card-info">
                             <p>เอกสารที่เซ็นเสร็จสิ้น</p>
-                            <h3>5</h3>
+                            <h3>0</h3>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-icon" style="background: #eff6ff; color: #3b82f6;"><i class="fa-solid fa-paper-plane"></i></div>
                         <div class="card-info">
                             <p>เอกสารที่ฉันส่งออก</p>
-                            <h3>2</h3>
+                            <h3>0</h3>
                         </div>
                     </div>
                 </div>
@@ -141,7 +141,7 @@
                         </div>
 
                         <div id="tab-upload" class="sig-tab-content">
-                            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">อัปโหลดไฟล์ภาพลายเซ็นของคุณ (รองรับ .png, .jpeg, .svg)</p>
+                            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">อัปโหลดไฟล์ภาพลายเซ็นของคุณ (รองรับ .png, .jpg, .svg)</p>
                             
                             <input type="file" id="sigUploadInput" accept=".png, .jpeg, .jpg, .svg" style="display:none;" onchange="handleSigUpload(event)">
                             
@@ -170,51 +170,55 @@
                 </div>
             </section>
             <section id="profile" class="content-section">
-                <div class="profile-grid">
-                    
-                    <div class="panel profile-card">
-                        <div class="profile-avatar-large">
+                
+                <div class="panel" style="padding: 0; overflow: hidden; margin-bottom: 25px;">
+                    <div class="profile-banner"></div>
+                    <div class="profile-header">
+                        <div class="profile-avatar-new">
                             <i class="fa-regular fa-user"></i>
                         </div>
-                        <h3 style="font-size: 20px; margin-bottom: 5px;">สมชาย ใจดี</h3>
-                        <p class="profile-role">พนักงานทั่วไป (User)</p>
-                        
-                        <div class="profile-badges">
-                            <span class="badge">EMP001</span>
-                            <span class="badge badge-primary">IT</span>
+                        <div class="profile-name-area">
+                            <h3>ศศิวัฒน์ หวังเชย</h3>
+                            <p>User | แผนก Machine 1</p>
                         </div>
-
-                        <div class="profile-details">
-                            <div class="detail-item">
-                                <i class="fa-regular fa-envelope"></i>
-                                <div>
-                                    <small>อีเมล</small>
-                                    <p>somchai.j@isuzu.com</p>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fa-regular fa-calendar"></i>
-                                <div>
-                                    <small>วันที่เริ่มงาน</small>
-                                    <p>01 ม.ค. 2568</p>
-                                </div>
-                            </div>
+                        <div>
+                            <button class="btn btn-outline" onclick="document.querySelectorAll('.sidebar-menu li')[4].click()">
+                                <i class="fa-solid fa-signature"></i> จัดการลายเซ็น
+                            </button>
                         </div>
+                    </div>
+                </div>
 
-                        <button class="btn btn-outline" style="width: 100%; justify-content: space-between; margin-top: 25px;" onclick="document.querySelectorAll('.sidebar-menu li')[4].click()">
-                            <span style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-signature"></i> ตั้งค่าลายเซ็น</span>
-                            <i class="fa-solid fa-chevron-right" style="font-size: 12px; color: var(--text-muted);"></i>
-                        </button>
+                <div class="profile-grid-new">
+                    <div class="panel">
+                        <h4 style="margin-bottom: 20px; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-address-card" style="color: var(--primary);"></i> ข้อมูลบัญชีผู้ใช้
+                        </h4>
+                        <ul class="profile-info-list">
+                            <li>
+                                <span class="info-label">รหัสพนักงาน</span>
+                                <span class="info-value badge">IEMT001</span>
+                            </li>
+                            <li>
+                                <span class="info-label">อีเมล</span>
+                                <span class="info-value">sasiwat@isuzu.com</span>
+                            </li>
+                            <li>
+                                <span class="info-label">สถานะบัญชี</span>
+                                <span class="info-value text-green" style="font-weight: 500;"><i class="fa-solid fa-circle-check"></i> ใช้งานปกติ (Active)</span>
+                            </li>
+                        </ul>
                     </div>
 
+                    <!-- ขวา: ความปลอดภัย (เปลี่ยนรหัสผ่าน) -->
                     <div class="panel password-card">
-                        <div class="panel-header" style="margin-bottom: 25px;">
-                            <h3 style="display: flex; align-items: center; gap: 10px;">
+                        <div class="panel-header" style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
+                            <h3 style="display: flex; align-items: center; gap: 10px; font-size: 18px;">
                                 <i class="fa-solid fa-lock" style="color: var(--primary);"></i> เปลี่ยนรหัสผ่าน
                             </h3>
                         </div>
                         
-                        <div class="form-group" style="margin-bottom: 25px;">
+                        <div class="form-group" style="margin-bottom: 20px;">
                             <label>รหัสผ่านปัจจุบัน</label>
                             <input type="password" id="currentPwd" placeholder="••••••••">
                         </div>
@@ -230,19 +234,71 @@
                             </div>
                         </div>
 
-                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">
-                            * รหัสผ่านที่ดีควรประกอบด้วยตัวอักษรและตัวเลข
-                        </p>
-
-                        <div style="display: flex; justify-content: flex-end;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                            <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
+                                * รหัสผ่านที่ดีควรประกอบด้วยตัวอักษรและตัวเลข
+                            </p>
                             <button class="btn btn-primary" onclick="changePassword()">บันทึกการเปลี่ยนแปลง</button>
                         </div>
                     </div>
-
                 </div>
+
             </section>
 
-            <section id="inbox" class="content-section"><div class="panel"><h3>เอกสารรอเซ็น</h3></div></section>
+            <!-- ==========================================
+                 หน้า: รอฉันเซ็น (Inbox / Pending Documents)
+            ========================================== -->
+            <section id="inbox" class="content-section">
+                <div class="panel">
+                    <div class="panel-header" style="border-bottom: none; padding-bottom: 0;">
+                        <div>
+                            <h3 style="font-size: 20px; color: var(--text-main); margin-bottom: 5px;">กล่องเอกสารเข้า</h3>
+                            <p style="color: var(--text-muted); font-size: 14px;">รายการเอกสารที่รอให้คุณพิจารณาและลงนาม</p>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive" style="margin-top: 20px;">
+                        <table class="user-data-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40%;">เลขที่ / หัวข้อเอกสาร</th>
+                                    <th style="width: 25%;">ผู้ส่ง</th>
+                                    <th style="width: 20%;">วันที่ส่ง</th>
+                                    <th style="width: 15%; text-align: center;">ดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inboxTableBody">
+                                <!-- 🟢 กรณีที่มี 1 เอกสารรอเซ็น -->
+                                <tr>
+                                    <td>
+                                        <strong style="color: var(--text-main); font-weight: 500; font-size: 15px;">บันทึกขอเบิกเครื่องมือช่าง (ประแจปอนด์)</strong><br>
+                                        <span style="font-size: 12px; color: var(--text-muted);">
+                                            <i class="fa-regular fa-file-pdf" style="color: #ef4444; margin-right: 4px;"></i> DOC-202606-001
+                                        </span>
+                                    </td>
+                                    <td style="color: var(--text-main);">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <div style="width: 28px; height: 28px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #475569;">
+                                                <i class="fa-solid fa-user"></i>
+                                            </div>
+                                            สมบูรณ์ (พี่เลี้ยงฝึกงาน)
+                                        </div>
+                                    </td>
+                                    <td style="color: var(--text-muted); font-size: 13px;">
+                                        23 มิ.ย. 2569 <br>
+                                        <small>10:30 น.</small>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button class="btn btn-primary" style="padding: 6px 15px; font-size: 13px; border-radius: 6px; width: 100%; justify-content: center; box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);">
+                                            <i class="fa-solid fa-pen-nib"></i> ลงนาม
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
             <section id="send-doc" class="content-section"><div class="panel"><h3>ระบบอัปโหลดเอกสาร (รอทำสเต็ปหน้า)</h3></div></section>
             <section id="history" class="content-section"><div class="panel"><h3>ประวัติเอกสาร</h3></div></section>
 
