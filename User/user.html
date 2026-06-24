@@ -299,7 +299,105 @@
                     </div>
                 </div>
             </section>
-            <section id="send-doc" class="content-section"><div class="panel"><h3>ระบบอัปโหลดเอกสาร (รอทำสเต็ปหน้า)</h3></div></section>
+            <!-- ==========================================
+                 หน้า: ส่งเอกสารใหม่ (Send Document)
+            ========================================== -->
+            <section id="send-doc" class="content-section">
+                <div style="margin-bottom: 25px;">
+                    <h3 style="font-size: 22px; margin-bottom: 5px;">สร้างเอกสารใหม่</h3>
+                    <p style="color: var(--text-muted); font-size: 14px;">อัปโหลดไฟล์ PDF, วางลายเซ็นของคุณ , และกำหนดผู้รับช่วงต่อตามลำดับ</p>
+                </div>
+
+                <!-- 📌 ขั้นตอนที่ 1: อัปโหลดไฟล์ -->
+                <div class="panel" style="margin-bottom: 25px;">
+                    <h4 class="step-title"><span class="step-num">1</span> อัปโหลดไฟล์เอกสาร</h4>
+                    <div class="form-row" style="margin-top: 20px;">
+                        <div class="form-group">
+                            <label>ชื่อเอกสาร <span style="color: #dc2626;">*</span></label>
+                            <input type="text" id="docName" placeholder="เช่น ใบขออนุมัติสั่งซื้ออะไหล่...">
+                        </div>
+                        <div class="form-group">
+                            <label>ไฟล์ PDF <span style="color: #dc2626;">*</span></label>
+                            <div class="file-upload-box" onclick="document.getElementById('pdfFileInput').click()">
+                                <span id="pdfFileName" style="color: var(--text-muted); font-size: 14px;">คลิกเพื่อเลือกไฟล์ .pdf</span>
+                                <i class="fa-regular fa-file-pdf" style="font-size: 22px; color: var(--text-muted);"></i>
+                            </div>
+                            <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;" onchange="handlePdfSelect(event)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 📌 Grid ขั้นตอนที่ 2 และ 3 -->
+                <div class="send-doc-grid">
+                    
+                    <!-- ขั้นตอนที่ 2: จำลองกระดาษ PDF และวางลายเซ็น -->
+                    <div class="panel">
+                        <div class="panel-header" style="border-bottom: none; padding-bottom: 0;">
+                            <h4 class="step-title"><span class="step-num">2</span> ลายเซ็นของคุณ (ผู้ส่ง)</h4>
+                        </div>
+                        <div class="pdf-mock-container">
+                            <div class="pdf-paper">
+                                <p style="text-align: center; color: #cbd5e1; margin-top: 80px; font-size: 14px;">พื้นที่แสดงเอกสารจำลอง</p>
+                                
+                                <!-- กล่องลายเซ็นที่จะเด้งขึ้นมาเมื่อกดปุ่ม -->
+                                <div id="placedSignature" class="drag-signature">
+                                    <button class="del-sig-btn" onclick="removePlacedSignature()"><i class="fa-solid fa-xmark"></i></button>
+                                    <img id="placedSignatureImg" src="">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 15px;">
+                            <button class="btn btn-outline" style="display: inline-flex;" onclick="placeSignatureOnPaper()">
+                                <i class="fa-solid fa-pen-nib"></i> วางลายเซ็นของฉัน
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ขั้นตอนที่ 3: กำหนดคิวผู้รับช่วงต่อ -->
+                    <div class="panel">
+                        <h4 class="step-title"><span class="step-num">3</span> ผู้รับช่วงต่อ (ตามลำดับ)</h4>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 20px; margin-bottom: 20px;">
+                            <select id="signerSelect" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Prompt'; font-size: 14px; outline: none;">
+                                <option value="">-- เลือกผู้ลงนาม --</option>
+                                <option value="สมบูรณ์ (พี่เลี้ยงฝึกงาน)">สมบูรณ์ (พี่เลี้ยงฝึกงาน)</option>
+                                <option value="หัวหน้าแผนก Machine 1">หัวหน้าแผนก Machine 1</option>
+                                <option value="ผู้จัดการฝ่ายผลิต (Production Mgr.)">ผู้จัดการฝ่ายผลิต (Production Mgr.)</option>
+                            </select>
+                            <button class="btn btn-primary" style="padding: 10px 18px;" onclick="addSigner()"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+
+                        <div id="routingList" class="routing-list">
+                            <!-- รายชื่อจะมาโผล่ตรงนี้ -->
+                            <div class="empty-routing" id="emptyRouting">
+                                <i class="fa-solid fa-users"></i>
+                                <p>ยังไม่มีรายชื่อผู้รับช่วงต่อ</p>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 25px; padding: 12px; font-size: 15px;" onclick="sendDocument()">
+                            <i class="fa-solid fa-paper-plane"></i> ยืนยันและส่งเอกสาร
+                        </button>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 Popup ยืนยันการส่ง (Success Modal)
+            ========================================== -->
+            <div id="successModal" class="modal-overlay" style="z-index: 9999;">
+                <div class="modal-content" style="text-align: center; width: 420px; padding: 40px 30px;">
+                    <div style="width: 80px; height: 80px; background: #f0fdf4; color: #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 20px; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.2);">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h2 style="margin-bottom: 10px; color: var(--text-main); font-size: 24px;">สำเร็จ!</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 30px; font-size: 14px; line-height: 1.6;">
+                        เอกสาร <strong id="successDocName" style="color: var(--primary);"></strong><br>ถูกสร้างและส่งไปยังผู้ลงนามลำดับที่ 1 เรียบร้อยแล้ว
+                    </p>
+                    <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 15px;" onclick="closeSuccessModal()">ตกลง (OK)</button>
+                </div>
+            </div>
             <section id="history" class="content-section"><div class="panel"><h3>ประวัติเอกสาร</h3></div></section>
 
         </div>

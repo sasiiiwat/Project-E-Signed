@@ -285,3 +285,57 @@ body {
     font-size: 13px; 
     color: var(--text-muted); 
 }
+
+/* ==========================================================================
+   9. ส่งเอกสารใหม่ (Send New Document)
+   ========================================================================== */
+.step-title { font-size: 16px; display: flex; align-items: center; gap: 12px; }
+.step-num { background: var(--text-main); color: white; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 13px; font-weight: bold; }
+
+.file-upload-box { border: 2px solid var(--border-color); border-radius: 10px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: var(--bg-color); transition: 0.2s; height: 46px;}
+.file-upload-box:hover { border-color: var(--primary); }
+
+.send-doc-grid { display: grid; grid-template-columns: 1.8fr 1fr; gap: 25px; }
+
+/* กล่องกระดาษจำลอง */
+.pdf-mock-container { 
+    background: #f1f5f9; 
+    border: 1px solid var(--border-color); 
+    border-radius: 10px; 
+    height: 550px; /* 🟢 อัปเกรดความสูงจาก 350px เป็น 550px ให้เต็มตา */
+    margin-top: 20px; 
+    overflow: hidden; 
+    display: flex; 
+    justify-content: center; 
+    padding: 20px; 
+    position: relative; 
+}
+.pdf-paper { 
+    background: white; 
+    width: 90%; /* 🟢 ขยายความกว้างของตัวกระดาษจาก 75% เป็น 90% */
+    height: 100%; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* เพิ่มเงาให้ดูมีมิติเป็นกระดาษจริงๆ */
+    position: relative; 
+    border-radius: 4px; 
+}
+
+/* ลายเซ็นจำลองตอนกดวาง */
+.drag-signature { position: absolute; border: 2px dashed var(--primary); padding: 5px; background: rgba(255,255,255,0.8); display: none; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.drag-signature img { max-width: 140px; max-height: 70px; display: block; }
+.del-sig-btn { position: absolute; top: -10px; right: -10px; background: #dc2626; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
+/* คิวผู้รับช่วงต่อ */
+.routing-list { border: 2px dashed var(--border-color); border-radius: 10px; min-height: 220px; padding: 15px; display: flex; flex-direction: column; gap: 12px; background: var(--bg-color); }
+.empty-routing { text-align: center; color: var(--text-muted); margin: auto; }
+.empty-routing i { font-size: 35px; color: #cbd5e1; margin-bottom: 12px; display: block; }
+.empty-routing p { font-size: 13px; }
+
+.routing-item { background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 15px; display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); animation: fadeIn 0.3s; }
+.routing-num { background: #1e293b; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+.routing-name { flex: 1; font-size: 14px; font-weight: 500; }
+.routing-del { color: #dc2626; cursor: pointer; background: transparent; border: none; font-size: 16px; transition: 0.2s; }
+.routing-del:hover { color: #b91c1c; transform: scale(1.1); }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; backdrop-filter: blur(3px); }
+.modal-content { background: var(--panel-bg); border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid var(--border-color); }

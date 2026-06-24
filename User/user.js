@@ -218,3 +218,140 @@ function loadSignatureToDashboard() {
         }
     }
 }
+
+// ==========================================================================
+// 5. ระบบส่งเอกสารใหม่ (Upload, แปะลายเซ็น, กำหนดคิว)
+// ==========================================================================
+
+// โชว์ชื่อไฟล์ตอนเลือก PDF
+function handlePdfSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        document.getElementById('pdfFileName').innerText = file.name;
+        document.getElementById('pdfFileName').style.color = 'var(--text-main)';
+        document.getElementById('pdfFileName').style.fontWeight = '500';
+    }
+}
+
+// แปะลายเซ็นลงกระดาษจำลอง
+function placeSignatureOnPaper() {
+    const savedSig = localStorage.getItem('signature_EMP001');
+    if (!savedSig) {
+        alert('คุณยังไม่ได้ตั้งค่าลายเซ็นครับ กรุณาไปที่เมนู "ข้อมูลส่วนตัว" ก่อน');
+        return;
+    }
+    
+    const sigBox = document.getElementById('placedSignature');
+    const imgEl = document.getElementById('placedSignatureImg');
+    
+    imgEl.src = savedSig;
+    sigBox.style.display = 'block';
+    
+    // จำลองให้ลายเซ็นไปโผล่ตรงกลางกระดาษพอดี
+    sigBox.style.top = '50%';
+    sigBox.style.left = '50%';
+    sigBox.style.transform = 'translate(-50%, -50%)';
+}
+
+// ลบลายเซ็นออกจากกระดาษ
+function removePlacedSignature() {
+    document.getElementById('placedSignature').style.display = 'none';
+}
+
+// ระบบคิวผู้รับช่วงต่อ (Routing List)
+let routingQueue = [];
+
+function addSigner() {
+    const select = document.getElementById('signerSelect');
+    const signerName = select.value;
+    
+    if (!signerName) {
+        alert('กรุณาเลือกผู้ลงนามจากเมนูก่อนกดเพิ่มครับ');
+        return;
+    }
+    
+    routingQueue.push(signerName);
+    renderRoutingList();
+    select.value = ''; // รีเซ็ต Dropdown
+}
+
+function removeSigner(index) {
+    routingQueue.splice(index, 1);
+    renderRoutingList();
+}
+
+function renderRoutingList() {
+    const container = document.getElementById('routingList');
+    
+    // ถ้าไม่มีใครเลย โชว์กล่องเปล่า
+    if (routingQueue.length === 0) {
+        container.innerHTML = `
+            <div class="empty-routing" id="emptyRouting">
+                <i class="fa-solid fa-users"></i>
+                <p>ยังไม่มีรายชื่อผู้รับช่วงต่อ</p>
+            </div>`;
+        container.style.border = '2px dashed var(--border-color)';
+        container.style.background = 'var(--bg-color)';
+        return;
+    }
+    
+    // ถ้ามีคน โชว์รายการ
+    container.style.border = '1px solid var(--border-color)';
+    container.style.background = '#f8fafc';
+    container.innerHTML = '';
+    
+    routingQueue.forEach((signer, index) => {
+        container.innerHTML += `
+            <div class="routing-item">
+                <div class="routing-num">${index + 1}</div>
+                <div class="routing-name">${signer}</div>
+                <button class="routing-del" onclick="removeSigner(${index})" title="ลบผู้ลงนาม"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+        `;
+    });
+}
+
+// เช็คข้อมูลก่อนกด ยืนยันและส่งเอกสาร
+function sendDocument() {
+    const docName = document.getElementById('docName').value;
+    const pdfFile = document.getElementById('pdfFileInput').files[0];
+    const isSigPlaced = document.getElementById('placedSignature').style.display === 'block';
+
+    if (!docName || !pdfFile) {
+        alert('กรุณากรอก "ชื่อเอกสาร" และ "อัปโหลดไฟล์ PDF" ให้ครบถ้วนครับ');
+        return;
+    }
+    
+    if (!isSigPlaced) {
+        alert('อย่าลืมกดปุ่ม "วางลายเซ็นของฉัน" ลงในเอกสารด้วยครับ!');
+        return;
+    }
+
+    if (routingQueue.length === 0) {
+        alert('กรุณาเพิ่ม "รายชื่อผู้รับช่วงต่อ" อย่างน้อย 1 คนครับ');
+        return;
+    }
+
+    // ผ่านทุกเงื่อนไข โชว์ป๊อปอัปสำเร็จ!
+    document.getElementById('successDocName').innerText = docName;
+    document.getElementById('successModal').style.display = 'flex';
+}
+
+// ปิดป๊อปอัป และล้างข้อมูลเตรียมส่งใบใหม่
+function closeSuccessModal() {
+    document.getElementById('successModal').style.display = 'none';
+    
+    // เคลียร์ฟอร์ม
+    document.getElementById('docName').value = '';
+    document.getElementById('pdfFileInput').value = '';
+    document.getElementById('pdfFileName').innerText = 'คลิกเพื่อเลือกไฟล์ .pdf';
+    document.getElementById('pdfFileName').style.color = 'var(--text-muted)';
+    document.getElementById('pdfFileName').style.fontWeight = 'normal';
+    
+    removePlacedSignature();
+    routingQueue = [];
+    renderRoutingList();
+    
+    // เด้งกลับไปหน้า Dashboard หลัก
+    document.querySelectorAll('.sidebar-menu li')[0].click();
+}
