@@ -6,10 +6,11 @@
     <title>ระบบจัดการเอกสาร | E-Signing</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="user.css?v=2">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    
+    <link rel="stylesheet" href="user.css?v=13">
 </head>
 <body>
 
@@ -308,7 +309,6 @@
                     <p style="color: var(--text-muted); font-size: 14px;">อัปโหลดไฟล์ PDF, วางลายเซ็นของคุณ , และกำหนดผู้รับช่วงต่อตามลำดับ</p>
                 </div>
 
-                <!-- 📌 ขั้นตอนที่ 1: อัปโหลดไฟล์ -->
                 <div class="panel" style="margin-bottom: 25px;">
                     <h4 class="step-title"><span class="step-num">1</span> อัปโหลดไฟล์เอกสาร</h4>
                     <div class="form-row" style="margin-top: 20px;">
@@ -318,34 +318,50 @@
                         </div>
                         <div class="form-group">
                             <label>ไฟล์ PDF <span style="color: #dc2626;">*</span></label>
-                            <div class="file-upload-box" onclick="document.getElementById('pdfFileInput').click()">
-                                <span id="pdfFileName" style="color: var(--text-muted); font-size: 14px;">คลิกเพื่อเลือกไฟล์ .pdf</span>
-                                <i class="fa-regular fa-file-pdf" style="font-size: 22px; color: var(--text-muted);"></i>
+                            
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <div class="file-upload-box" style="flex: 1;" onclick="document.getElementById('pdfFileInput').click()">
+                                    <span id="pdfFileName" style="color: var(--text-muted); font-size: 14px;">คลิกเพื่อเลือกไฟล์ .pdf</span>
+                                    <i class="fa-regular fa-file-pdf" style="font-size: 22px; color: var(--text-muted);"></i>
+                                </div>
+                                <button id="removePdfBtn" class="btn btn-outline" style="display: none; padding: 10px 15px; height: 46px; color: #dc2626; border-color: #dc2626;" onclick="removePdfFile()">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                                <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;" onchange="handlePdfSelect(event)">
                             </div>
-                            <input type="file" id="pdfFileInput" accept=".pdf" style="display: none;" onchange="handlePdfSelect(event)">
                         </div>
                     </div>
                 </div>
 
-                <!-- 📌 Grid ขั้นตอนที่ 2 และ 3 -->
                 <div class="send-doc-grid">
                     
-                    <!-- ขั้นตอนที่ 2: จำลองกระดาษ PDF และวางลายเซ็น -->
                     <div class="panel">
-                        <div class="panel-header" style="border-bottom: none; padding-bottom: 0;">
+                        <div class="panel-header" style="border-bottom: none; padding-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
                             <h4 class="step-title"><span class="step-num">2</span> ลายเซ็นของคุณ (ผู้ส่ง)</h4>
+                            
+                            <div id="pdfPagination" style="display: none; align-items: center; gap: 10px;">
+                                <button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="onPrevPage()"><i class="fa-solid fa-chevron-left"></i></button>
+                                <span style="font-size: 13px; font-weight: 500;">หน้า <span id="page_num">1</span> / <span id="page_count">1</span></span>
+                                <button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="onNextPage()"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
                         </div>
-                        <div class="pdf-mock-container">
-                            <div class="pdf-paper">
-                                <p style="text-align: center; color: #cbd5e1; margin-top: 80px; font-size: 14px;">พื้นที่แสดงเอกสารจำลอง</p>
+
+                        <div class="pdf-mock-container" id="pdfContainer" style="background: #94a3b8; overflow-y: auto;">
+                            <p id="pdfPlaceholderText" style="text-align: center; color: white; margin-top: 150px; font-size: 15px;">
+                                <i class="fa-solid fa-file-arrow-up" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>
+                                กรุณาอัปโหลดไฟล์ PDF ในขั้นตอนที่ 1<br>เพื่อแสดงเอกสารที่นี่
+                            </p>
+                            
+                            <div id="pdfRenderWrapper" style="position: relative; display: none; margin: 0 auto;">
+                                <canvas id="pdfRenderCanvas" style="box-shadow: 0 5px 15px rgba(0,0,0,0.2);"></canvas>
                                 
-                                <!-- กล่องลายเซ็นที่จะเด้งขึ้นมาเมื่อกดปุ่ม -->
                                 <div id="placedSignature" class="drag-signature">
                                     <button class="del-sig-btn" onclick="removePlacedSignature()"><i class="fa-solid fa-xmark"></i></button>
                                     <img id="placedSignatureImg" src="">
                                 </div>
                             </div>
                         </div>
+                        
                         <div style="text-align: right; margin-top: 15px;">
                             <button class="btn btn-outline" style="display: inline-flex;" onclick="placeSignatureOnPaper()">
                                 <i class="fa-solid fa-pen-nib"></i> วางลายเซ็นของฉัน
@@ -358,11 +374,20 @@
                         <h4 class="step-title"><span class="step-num">3</span> ผู้รับช่วงต่อ (ตามลำดับ)</h4>
                         
                         <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px; margin-bottom: 20px;">
-                            <div class="form-group">
+                            <div class="form-group" style="position: relative;">
                                 <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display: block;">1. กรองด้วยแผนก (ระบุหรือไม่ก็ได้)</label>
-                                <select id="signerDeptSelect" onchange="filterSignersByDept()" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Prompt'; font-size: 14px; outline: none; background: var(--bg-color);">
-                                    <option value="">-- แสดงพนักงานทุกแผนก --</option>
-                                </select>
+                                
+                                <div class="custom-dropdown-container">
+                                    <div class="custom-dropdown-selected" id="deptDropdownSelected" onclick="toggleDeptDropdown(event)">
+                                        <span>-- แสดงพนักงานทุกแผนก --</span>
+                                        <i class="fa-solid fa-chevron-down" id="deptDropdownArrow" style="font-size: 12px; color: var(--text-muted); transition: 0.3s;"></i>
+                                    </div>
+                                    
+                                    <div class="custom-dropdown-list" id="deptDropdownList">
+                                        </div>
+                                </div>
+                                
+                                <input type="hidden" id="signerDeptSelect" value="">
                             </div>
                             
                             <div class="form-group" style="position: relative;">

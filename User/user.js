@@ -223,147 +223,135 @@ function loadSignatureToDashboard() {
 }
 
 // ==========================================================================
-// 5. ระบบส่งเอกสารใหม่ (Upload, แปะลายเซ็น, กำหนดคิว)
+// 5. ระบบส่งเอกสารใหม่ (Upload, อ่าน PDF ของจริง, แปะลายเซ็น, กำหนดคิว)
 // ==========================================================================
 
-// โชว์ชื่อไฟล์ตอนเลือก PDF
+// ==========================================================================
+// 5. ระบบส่งเอกสารใหม่ (Upload, อ่าน PDF ของจริง, แปะลายเซ็น, กำหนดคิว)
+// ==========================================================================
+
+// 🟢 1. เติมบรรทัดนี้เข้าไปเพื่อให้ PDF.js มีตัวช่วยประมวลผลไฟล์หนักๆ
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+// ตัวแปรสำหรับคุม PDF.js
+let pdfDoc = null;
+let pageNum = 1;
+let pageRendering = false;
+let pageNumPending = null;
+
+// ฟังก์ชันดึงไฟล์ PDF มาโชว์
 function handlePdfSelect(event) {
     const file = event.target.files[0];
     if (file) {
         document.getElementById('pdfFileName').innerText = file.name;
         document.getElementById('pdfFileName').style.color = 'var(--text-main)';
         document.getElementById('pdfFileName').style.fontWeight = '500';
+        
+        // โชว์ปุ่มลบ
+        document.getElementById('removePdfBtn').style.display = 'flex';
+        
+        // ใช้ FileReader อ่านไฟล์ไปให้ PDF.js
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const typedarray = new Uint8Array(e.target.result);
+            
+            // 🟢 2. ปรับวิธีการส่งไฟล์ให้ PDF.js ({ data: typedarray }) เพื่อลดข้อผิดพลาด
+            pdfjsLib.getDocument({ data: typedarray }).promise.then(doc => {
+                pdfDoc = doc;
+                document.getElementById('page_count').textContent = doc.numPages;
+                
+                // สลับ UI
+                document.getElementById('pdfPlaceholderText').style.display = 'none';
+                document.getElementById('pdfPagination').style.display = 'flex';
+                document.getElementById('pdfRenderWrapper').style.display = 'block';
+                
+                pageNum = 1; // เริ่มที่หน้า 1
+                renderPage(pageNum);
+            }).catch(err => {
+                console.error("PDF Load Error: ", err); // พิมพ์สาเหตุที่แท้จริงลง Console
+                alert("ไฟล์ PDF มีปัญหาหรือไม่สามารถอ่านได้ครับ");
+            });
+        };
+        reader.readAsArrayBuffer(file);
     }
 }
 
-// แปะลายเซ็นลงกระดาษจำลอง
-function placeSignatureOnPaper() {
-    const savedSig = localStorage.getItem('signature_EMP001');
-    if (!savedSig) {
-        alert('คุณยังไม่ได้ตั้งค่าลายเซ็นครับ กรุณาไปที่เมนู "ข้อมูลส่วนตัว" ก่อน');
-        return;
-    }
-    
-    const sigBox = document.getElementById('placedSignature');
-    const imgEl = document.getElementById('placedSignatureImg');
-    
-    imgEl.src = savedSig;
-    sigBox.style.display = 'block';
-    
-    // จำลองให้ลายเซ็นไปโผล่ตรงกลางกระดาษพอดี
-    sigBox.style.top = '50%';
-    sigBox.style.left = '50%';
-    sigBox.style.transform = 'translate(-50%, -50%)';
-}
 
-// ลบลายเซ็นออกจากกระดาษ
-function removePlacedSignature() {
-    document.getElementById('placedSignature').style.display = 'none';
-}
+// 🟢 ฟังก์ชันวาดกระดาษ PDF ลงจอ
+function renderPage(num) {
+    pageRendering = true;
+    pdfDoc.getPage(num).then(page => {
+        const canvas = document.getElementById('pdfRenderCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // ขยายภาพให้คมชัด (Scale 1.5)
+        const viewport = page.getViewport({ scale: 1.5 });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
 
-// ระบบคิวผู้รับช่วงต่อ (Routing List)
-let routingQueue = [];
+        // วาดลง Canvas
+        const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+        };
+        const renderTask = page.render(renderContext);
 
-function addSigner() {
-    const select = document.getElementById('signerSelect');
-    const signerName = select.value;
-    
-    if (!signerName) {
-        alert('กรุณาเลือกผู้ลงนามจากเมนูก่อนกดเพิ่มครับ');
-        return;
-    }
-    
-    routingQueue.push(signerName);
-    renderRoutingList();
-    select.value = ''; // รีเซ็ต Dropdown
-}
-
-function removeSigner(index) {
-    routingQueue.splice(index, 1);
-    renderRoutingList();
-}
-
-function renderRoutingList() {
-    const container = document.getElementById('routingList');
-    
-    // ถ้าไม่มีใครเลย โชว์กล่องเปล่า
-    if (routingQueue.length === 0) {
-        container.innerHTML = `
-            <div class="empty-routing" id="emptyRouting">
-                <i class="fa-solid fa-users"></i>
-                <p>ยังไม่มีรายชื่อผู้รับช่วงต่อ</p>
-            </div>`;
-        container.style.border = '2px dashed var(--border-color)';
-        container.style.background = 'var(--bg-color)';
-        return;
-    }
-    
-    // ถ้ามีคน โชว์รายการ
-    container.style.border = '1px solid var(--border-color)';
-    container.style.background = '#f8fafc';
-    container.innerHTML = '';
-    
-    routingQueue.forEach((signer, index) => {
-        container.innerHTML += `
-            <div class="routing-item">
-                <div class="routing-num">${index + 1}</div>
-                <div class="routing-name">${signer}</div>
-                <button class="routing-del" onclick="removeSigner(${index})" title="ลบผู้ลงนาม"><i class="fa-solid fa-trash-can"></i></button>
-            </div>
-        `;
+        renderTask.promise.then(() => {
+            pageRendering = false;
+            if (pageNumPending !== null) {
+                renderPage(pageNumPending);
+                pageNumPending = null;
+            }
+            // ย่อขนาด Canvas ให้พอดีกล่อง Container (ให้มัน Scroll ได้ถ้ายาวไป)
+            canvas.style.width = '100%';
+            canvas.style.height = 'auto';
+            document.getElementById('pdfRenderWrapper').style.width = '100%';
+        });
     });
+    
+    // อัปเดตเลขหน้า
+    document.getElementById('page_num').textContent = num;
+    
+    // ถ้าย้ายหน้า ให้ซ่อนลายเซ็นไปก่อนเพื่อไม่ให้มั่ว
+    removePlacedSignature(); 
 }
 
-// เช็คข้อมูลก่อนกด ยืนยันและส่งเอกสาร
-function sendDocument() {
-    const docName = document.getElementById('docName').value;
-    const pdfFile = document.getElementById('pdfFileInput').files[0];
-    const isSigPlaced = document.getElementById('placedSignature').style.display === 'block';
-
-    if (!docName || !pdfFile) {
-        alert('กรุณากรอก "ชื่อเอกสาร" และ "อัปโหลดไฟล์ PDF" ให้ครบถ้วนครับ');
-        return;
-    }
-    
-    if (!isSigPlaced) {
-        alert('อย่าลืมกดปุ่ม "วางลายเซ็นของฉัน" ลงในเอกสารด้วยครับ!');
-        return;
-    }
-
-    if (routingQueue.length === 0) {
-        alert('กรุณาเพิ่ม "รายชื่อผู้รับช่วงต่อ" อย่างน้อย 1 คนครับ');
-        return;
-    }
-
-    // ผ่านทุกเงื่อนไข โชว์ป๊อปอัปสำเร็จ!
-    document.getElementById('successDocName').innerText = docName;
-    document.getElementById('successModal').style.display = 'flex';
+function queueRenderPage(num) {
+    if (pageRendering) { pageNumPending = num; } 
+    else { renderPage(num); }
 }
 
-// ปิดป๊อปอัป และล้างข้อมูลเตรียมส่งใบใหม่
-function closeSuccessModal() {
-    ocument.getElementById('successModal').style.display = 'none';
-    
-    // รีเซ็ตตัวกรองและช่องค้นหาใหม่
-    if(document.getElementById('signerDeptSelect')) document.getElementById('signerDeptSelect').value = '';
-    if(document.getElementById('signerSearchInput')) document.getElementById('signerSearchInput').value = '';
-    
-    // เคลียร์ฟอร์ม
-    document.getElementById('docName').value = '';
+// 🟢 ฟังก์ชันเปลี่ยนหน้า ถัดไป/ก่อนหน้า
+function onPrevPage() {
+    if (pageNum <= 1) return;
+    pageNum--;
+    queueRenderPage(pageNum);
+}
+
+function onNextPage() {
+    if (pageNum >= pdfDoc.numPages) return;
+    pageNum++;
+    queueRenderPage(pageNum);
+}
+
+// 🟢 ฟังก์ชันลบไฟล์ทิ้ง
+function removePdfFile() {
     document.getElementById('pdfFileInput').value = '';
     document.getElementById('pdfFileName').innerText = 'คลิกเพื่อเลือกไฟล์ .pdf';
     document.getElementById('pdfFileName').style.color = 'var(--text-muted)';
     document.getElementById('pdfFileName').style.fontWeight = 'normal';
+    document.getElementById('removePdfBtn').style.display = 'none';
+    
+    // ล้างจอ PDF
+    pdfDoc = null;
+    document.getElementById('pdfRenderWrapper').style.display = 'none';
+    document.getElementById('pdfPagination').style.display = 'none';
+    document.getElementById('pdfPlaceholderText').style.display = 'block';
     
     removePlacedSignature();
-    routingQueue = [];
-    renderRoutingList();
-    
-    // เด้งกลับไปหน้า Dashboard หลัก
-    document.querySelectorAll('.sidebar-menu li')[0].click();
 }
 // ==========================================================================
-// 6. ระบบค้นหาและกรองผู้ลงนามขั้นสูง (Custom Rounded Dropdown)
+// 6. ระบบค้นหาและกรองผู้ลงนามขั้นสูง (Custom Rounded Dropdown ทั้งหมด)
 // ==========================================================================
 
 const defaultCompanyUsers = [
@@ -375,11 +363,11 @@ const defaultCompanyUsers = [
     { name: "ธนพล (IT Support)", dept: "IT", status: "Active" }
 ];
 
-let currentFilteredUsers = []; // เก็บตัวคัดกรอง
+let currentFilteredUsers = []; 
 
 function initSignerSelection() {
-    const deptSelect = document.getElementById('signerDeptSelect');
-    if (!deptSelect) return;
+    const listContainer = document.getElementById('deptDropdownList');
+    if (!listContainer) return;
 
     let allUsers = [];
     const storageUsers = localStorage.getItem('my_users');
@@ -391,12 +379,55 @@ function initSignerSelection() {
     if (storageDepts) departments = JSON.parse(storageDepts);
     else departments = [...new Set(allUsers.map(u => u.dept))].filter(d => d);
 
-    deptSelect.innerHTML = '<option value="">-- แสดงพนักงานทุกแผนก --</option>';
+    // วาดรายชื่อแผนกลงในกล่อง Custom Dropdown มนๆ
+    listContainer.innerHTML = `
+        <div class="custom-dropdown-item" onclick="selectDeptOption('', '-- แสดงพนักงานทุกแผนก --')">
+            -- แสดงพนักงานทุกแผนก --
+        </div>
+    `;
+    
     departments.forEach(dept => {
-        deptSelect.innerHTML += `<option value="${dept}">${dept}</option>`;
+        listContainer.innerHTML += `
+            <div class="custom-dropdown-item" onclick="selectDeptOption('${dept}', '${dept}')">
+                ${dept}
+            </div>
+        `;
     });
 
-    currentFilteredUsers = allUsers; // เริ่มต้นให้ค้นหาได้ทุกคน
+    currentFilteredUsers = allUsers; 
+    
+    // ตั้งค่าเริ่มต้นของกล่องโชว์
+    document.getElementById('deptDropdownSelected').querySelector('span').innerText = '-- แสดงพนักงานทุกแผนก --';
+    document.getElementById('signerDeptSelect').value = '';
+}
+
+// 🟢 ฟังก์ชันใหม่: เปิด-ปิดกล่องแผนกแบบมน
+function toggleDeptDropdown(event) {
+    event.stopPropagation(); // กันบั๊กป๊อปอัปปิดตัวเองทันที
+    const list = document.getElementById('deptDropdownList');
+    const arrow = document.getElementById('deptDropdownArrow');
+    
+    // สั่งซ่อนกล่องค้นหาพนักงานไว้ก่อนเพื่อไม่ให้มันซ้อนกันจนบังตา
+    document.getElementById('customSignerDropdown').style.display = 'none';
+
+    if (list.style.display === 'flex') {
+        list.style.display = 'none';
+        arrow.classList.remove('custom-dropdown-arrow-rotate');
+    } else {
+        list.style.display = 'flex';
+        arrow.classList.add('custom-dropdown-arrow-rotate');
+    }
+}
+
+// 🟢 ฟังก์ชันใหม่: เมื่อคลิกเลือกแผนกจากกล่องมน
+function selectDeptOption(value, label) {
+    document.getElementById('signerDeptSelect').value = value;
+    document.getElementById('deptDropdownSelected').querySelector('span').innerText = label;
+    document.getElementById('deptDropdownList').style.display = 'none';
+    document.getElementById('deptDropdownArrow').classList.remove('custom-dropdown-arrow-rotate');
+    
+    // สั่งรันการคัดกรองพนักงานตามแผนกทันทีเหมือนของเดิม
+    filterSignersByDept();
 }
 
 function filterSignersByDept() {
@@ -412,10 +443,13 @@ function filterSignersByDept() {
     document.getElementById('customSignerDropdown').style.display = 'none';
 }
 
-// 🟢 ฟังก์ชันวาดกล่อง Dropdown มนๆ ของเรา
 function filterCustomDropdown() {
     const inputVal = document.getElementById('signerSearchInput').value.toLowerCase();
     const dropdown = document.getElementById('customSignerDropdown');
+    
+    // ซ่อนกล่องแผนกเผื่อเปิดค้างไว้
+    document.getElementById('deptDropdownList').style.display = 'none';
+    document.getElementById('deptDropdownArrow').classList.remove('custom-dropdown-arrow-rotate');
 
     const matched = currentFilteredUsers.filter(u =>
         u.status !== 'Inactive' &&
@@ -429,7 +463,7 @@ function filterCustomDropdown() {
 
     dropdown.innerHTML = '';
     matched.forEach(user => {
-        const safeName = user.name.replace(/'/g, "\\'"); // ป้องกันบั๊กชื่อมีลูกน้ำ
+        const safeName = user.name.replace(/'/g, "\\'");
         dropdown.innerHTML += `
             <div class="custom-suggest-item" onclick="selectCustomSigner('${safeName}')">
                 <span>${user.name}</span>
@@ -441,17 +475,23 @@ function filterCustomDropdown() {
     dropdown.style.display = 'flex';
 }
 
-// 🟢 เวลากดเลือกชื่อจากกล่องมนๆ
 function selectCustomSigner(name) {
     document.getElementById('signerSearchInput').value = name;
     document.getElementById('customSignerDropdown').style.display = 'none';
-    
-    // โฟกัสช่องกรอกให้พร้อมกดปุ่ม + ทันที
     document.getElementById('signerSearchInput').focus();
 }
 
-// 🟢 ปิดกล่องอัตโนมัติถ้าคลิกพื้นที่อื่นบนหน้าจอ
+// 🟢 อัปเดตการดักคลิกพื้นที่ว่างนอกกล่อง: ให้ปิดทั้งกล่องแผนก และกล่องรายชื่อพนักงานอัตโนมัติ
 document.addEventListener('click', function(e) {
+    const deptList = document.getElementById('deptDropdownList');
+    const deptSelect = document.getElementById('deptDropdownSelected');
+    const deptArrow = document.getElementById('deptDropdownArrow');
+    
+    if (deptList && deptSelect && !deptSelect.contains(e.target) && !deptList.contains(e.target)) {
+        deptList.style.display = 'none';
+        if(deptArrow) deptArrow.classList.remove('custom-dropdown-arrow-rotate');
+    }
+
     const dropdown = document.getElementById('customSignerDropdown');
     const input = document.getElementById('signerSearchInput');
     if (dropdown && input && !input.contains(e.target) && !dropdown.contains(e.target)) {
@@ -459,7 +499,6 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// กดปุ่มบวกเพื่อต่อคิว
 function addSignerFromSearch() {
     const input = document.getElementById('signerSearchInput');
     let value = input.value.trim();

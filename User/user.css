@@ -381,3 +381,67 @@ body {
     color: var(--primary);
     font-weight: 500;
 }
+/* ==========================================================================
+   11. กล่องเลือกแผนกแบบมน (Custom Rounded Department Dropdown)
+   ========================================================================== */
+.custom-dropdown-container {
+    width: 100%;
+}
+
+.custom-dropdown-selected {
+    width: 100%;
+    padding: 11px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px; /* 🟢 ความมนของช่องเลือก */
+    font-size: 14px;
+    background: var(--bg-color);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.2s;
+    height: 46px;
+}
+
+.custom-dropdown-selected:hover {
+    border-color: var(--primary);
+}
+
+.custom-dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px; /* 🟢 ความมนของกล่องตัวเลือกที่เด้งลงมา */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* 🟢 ใส่เงาให้ดูลอยนุ่มนวล */
+    margin-top: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 105; /* ให้ลอยอยู่เหนือองค์ประกอบอื่นๆ */
+    display: none; 
+    flex-direction: column;
+    padding: 6px;
+}
+
+.custom-dropdown-item {
+    padding: 10px 15px;
+    border-radius: 8px; /* 🟢 แถบไฮไลต์ด้านในก็มน */
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-main);
+    transition: 0.2s;
+}
+
+.custom-dropdown-item:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 500;
+}
+
+/* คลาสช่วยหมุนลูกศรตอนเปิด */
+.custom-dropdown-arrow-rotate {
+    transform: rotate(180deg);
+    color: var(--primary) !important;
+}
