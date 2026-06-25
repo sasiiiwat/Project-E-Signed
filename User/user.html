@@ -357,18 +357,30 @@
                     <div class="panel">
                         <h4 class="step-title"><span class="step-num">3</span> ผู้รับช่วงต่อ (ตามลำดับ)</h4>
                         
-                        <div style="display: flex; gap: 10px; margin-top: 20px; margin-bottom: 20px;">
-                            <select id="signerSelect" style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Prompt'; font-size: 14px; outline: none;">
-                                <option value="">-- เลือกผู้ลงนาม --</option>
-                                <option value="สมบูรณ์ (พี่เลี้ยงฝึกงาน)">สมบูรณ์ (พี่เลี้ยงฝึกงาน)</option>
-                                <option value="หัวหน้าแผนก Machine 1">หัวหน้าแผนก Machine 1</option>
-                                <option value="ผู้จัดการฝ่ายผลิต (Production Mgr.)">ผู้จัดการฝ่ายผลิต (Production Mgr.)</option>
-                            </select>
-                            <button class="btn btn-primary" style="padding: 10px 18px;" onclick="addSigner()"><i class="fa-solid fa-plus"></i></button>
+                        <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px; margin-bottom: 20px;">
+                            <div class="form-group">
+                                <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display: block;">1. กรองด้วยแผนก (ระบุหรือไม่ก็ได้)</label>
+                                <select id="signerDeptSelect" onchange="filterSignersByDept()" style="width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Prompt'; font-size: 14px; outline: none; background: var(--bg-color);">
+                                    <option value="">-- แสดงพนักงานทุกแผนก --</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" style="position: relative;">
+                                <label style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px; display: block;">2. พิมพ์ค้นหา หรือคลิกเลือกชื่อพนักงาน</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="signerSearchInput" placeholder="🔍 พิมพ์ชื่อเพื่อค้นหาพนักงาน..." 
+                                           oninput="filterCustomDropdown()" onclick="filterCustomDropdown()"
+                                           style="flex: 1; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); font-family: 'Prompt'; font-size: 14px; outline: none; background: var(--bg-color); transition: 0.2s;">
+                                    
+                                    <button class="btn btn-primary" style="padding: 10px 18px;" onclick="addSignerFromSearch()"><i class="fa-solid fa-plus"></i></button>
+                                </div>
+
+                                <div id="customSignerDropdown" class="custom-suggest-box">
+                                    </div>
+                            </div>
                         </div>
 
                         <div id="routingList" class="routing-list">
-                            <!-- รายชื่อจะมาโผล่ตรงนี้ -->
                             <div class="empty-routing" id="emptyRouting">
                                 <i class="fa-solid fa-users"></i>
                                 <p>ยังไม่มีรายชื่อผู้รับช่วงต่อ</p>

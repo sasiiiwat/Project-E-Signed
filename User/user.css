@@ -339,3 +339,45 @@ body {
 /* Modal */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; backdrop-filter: blur(3px); }
 .modal-content { background: var(--panel-bg); border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid var(--border-color); }
+/* ==========================================================================
+   10. กล่องค้นหารายชื่อ Custom (Rounded Dropdown)
+   ========================================================================== */
+.custom-suggest-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: calc(100% - 55px); /* ขนาดพอดีกับช่องกรอก ข้ามปุ่ม + */
+    background: var(--panel-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px; /* 🟢 ความมนของกล่อง */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* 🟢 เพิ่มเงาให้ดูลอยขึ้นมา */
+    margin-top: 5px;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 100;
+    display: none; 
+    flex-direction: column;
+    padding: 8px;
+}
+
+/* แต่ง Scrollbar ให้ดูเรียวสวย */
+.custom-suggest-box::-webkit-scrollbar { width: 6px; }
+.custom-suggest-box::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+.custom-suggest-item {
+    padding: 10px 15px;
+    border-radius: 8px; /* 🟢 ตัวเลือกด้านในก็มนด้วย */
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-main);
+    transition: 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-suggest-item:hover {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 500;
+}

@@ -1,4 +1,3 @@
-// 1. ระบบเปลี่ยนหน้าต่าง (Tab Switcher)
 function switchTab(tabId, element) {
     document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
     document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
@@ -8,9 +7,13 @@ function switchTab(tabId, element) {
     
     document.getElementById('page-title').innerText = element.querySelector('span').innerText;
 
-    // ถ้ากดมาหน้าวาดลายเซ็น ให้ปรับขนาดกระดานวาดรูปให้พอดี
     if (tabId === 'signature') {
         resizeCanvas();
+    }
+    
+    // 🔥 เพิ่มคำสั่งนี้เข้าไป: ถ้ากดมาหน้าส่งเอกสารใหม่ ให้รีโหลดข้อมูลรายชื่อพนักงานทันที 🔥
+    if (tabId === 'send-doc') {
+        initSignerSelection();
     }
 }
 
@@ -339,7 +342,11 @@ function sendDocument() {
 
 // ปิดป๊อปอัป และล้างข้อมูลเตรียมส่งใบใหม่
 function closeSuccessModal() {
-    document.getElementById('successModal').style.display = 'none';
+    ocument.getElementById('successModal').style.display = 'none';
+    
+    // รีเซ็ตตัวกรองและช่องค้นหาใหม่
+    if(document.getElementById('signerDeptSelect')) document.getElementById('signerDeptSelect').value = '';
+    if(document.getElementById('signerSearchInput')) document.getElementById('signerSearchInput').value = '';
     
     // เคลียร์ฟอร์ม
     document.getElementById('docName').value = '';
@@ -354,4 +361,125 @@ function closeSuccessModal() {
     
     // เด้งกลับไปหน้า Dashboard หลัก
     document.querySelectorAll('.sidebar-menu li')[0].click();
+}
+// ==========================================================================
+// 6. ระบบค้นหาและกรองผู้ลงนามขั้นสูง (Custom Rounded Dropdown)
+// ==========================================================================
+
+const defaultCompanyUsers = [
+    { name: "สมบูรณ์ (พี่เลี้ยงฝึกงาน)", dept: "Machine 1", status: "Active" },
+    { name: "พิเชษฐ์ (หัวหน้าแผนก Machine 1)", dept: "Machine 1", status: "Active" },
+    { name: "มานพ (วิศวกรอาวุโส)", dept: "Machine 1", status: "Active" },
+    { name: "สุรชัย (ผู้จัดการโรงงาน)", dept: "Production", status: "Active" },
+    { name: "นงลักษณ์ (ผู้จัดการ HR)", dept: "Office / HR", status: "Active" },
+    { name: "ธนพล (IT Support)", dept: "IT", status: "Active" }
+];
+
+let currentFilteredUsers = []; // เก็บตัวคัดกรอง
+
+function initSignerSelection() {
+    const deptSelect = document.getElementById('signerDeptSelect');
+    if (!deptSelect) return;
+
+    let allUsers = [];
+    const storageUsers = localStorage.getItem('my_users');
+    if (storageUsers) allUsers = JSON.parse(storageUsers);
+    else allUsers = defaultCompanyUsers;
+
+    let departments = [];
+    const storageDepts = localStorage.getItem('my_departments');
+    if (storageDepts) departments = JSON.parse(storageDepts);
+    else departments = [...new Set(allUsers.map(u => u.dept))].filter(d => d);
+
+    deptSelect.innerHTML = '<option value="">-- แสดงพนักงานทุกแผนก --</option>';
+    departments.forEach(dept => {
+        deptSelect.innerHTML += `<option value="${dept}">${dept}</option>`;
+    });
+
+    currentFilteredUsers = allUsers; // เริ่มต้นให้ค้นหาได้ทุกคน
+}
+
+function filterSignersByDept() {
+    const selectedDept = document.getElementById('signerDeptSelect').value;
+    let allUsers = [];
+    const storageUsers = localStorage.getItem('my_users');
+    if (storageUsers) allUsers = JSON.parse(storageUsers);
+    else allUsers = defaultCompanyUsers;
+
+    currentFilteredUsers = selectedDept ? allUsers.filter(u => u.dept === selectedDept) : allUsers;
+
+    document.getElementById('signerSearchInput').value = '';
+    document.getElementById('customSignerDropdown').style.display = 'none';
+}
+
+// 🟢 ฟังก์ชันวาดกล่อง Dropdown มนๆ ของเรา
+function filterCustomDropdown() {
+    const inputVal = document.getElementById('signerSearchInput').value.toLowerCase();
+    const dropdown = document.getElementById('customSignerDropdown');
+
+    const matched = currentFilteredUsers.filter(u =>
+        u.status !== 'Inactive' &&
+        (u.name.toLowerCase().includes(inputVal) || u.dept.toLowerCase().includes(inputVal))
+    );
+
+    if (matched.length === 0) {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    dropdown.innerHTML = '';
+    matched.forEach(user => {
+        const safeName = user.name.replace(/'/g, "\\'"); // ป้องกันบั๊กชื่อมีลูกน้ำ
+        dropdown.innerHTML += `
+            <div class="custom-suggest-item" onclick="selectCustomSigner('${safeName}')">
+                <span>${user.name}</span>
+                <span style="font-size: 11px; color: var(--text-muted); background: var(--bg-color); padding: 2px 8px; border-radius: 10px;">${user.dept}</span>
+            </div>
+        `;
+    });
+
+    dropdown.style.display = 'flex';
+}
+
+// 🟢 เวลากดเลือกชื่อจากกล่องมนๆ
+function selectCustomSigner(name) {
+    document.getElementById('signerSearchInput').value = name;
+    document.getElementById('customSignerDropdown').style.display = 'none';
+    
+    // โฟกัสช่องกรอกให้พร้อมกดปุ่ม + ทันที
+    document.getElementById('signerSearchInput').focus();
+}
+
+// 🟢 ปิดกล่องอัตโนมัติถ้าคลิกพื้นที่อื่นบนหน้าจอ
+document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('customSignerDropdown');
+    const input = document.getElementById('signerSearchInput');
+    if (dropdown && input && !input.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+    }
+});
+
+// กดปุ่มบวกเพื่อต่อคิว
+function addSignerFromSearch() {
+    const input = document.getElementById('signerSearchInput');
+    let value = input.value.trim();
+
+    if (!value) {
+        alert('กรุณาพิมพ์ค้นหาหรือคลิกเลือกรายชื่อผู้ลงนามก่อนครับ');
+        return;
+    }
+
+    if (value.includes(' (')) {
+        value = value.split(' (')[0];
+    }
+
+    if (routingQueue.includes(value)) {
+        alert('รายชื่อผู้ลงนามนี้ถูกเพิ่มเข้าไปในระบบคิวเรียบร้อยแล้วครับ');
+        return;
+    }
+
+    routingQueue.push(value);
+    renderRoutingList();
+    input.value = '';
+    document.getElementById('customSignerDropdown').style.display = 'none';
 }
