@@ -445,3 +445,116 @@ body {
     transform: rotate(180deg);
     color: var(--primary) !important;
 }
+/* ==========================================================================
+   12. ระบบลากวางและจัดการเอกสาร (Drag, Drop, Resize)
+   ========================================================================== */
+.draggable-item {
+    position: absolute;
+    padding: 6px;
+    border: 2px dashed transparent;
+    cursor: grab;
+    display: inline-block;
+    z-index: 50;
+    border-radius: 4px;
+    transition: border 0.2s, background 0.2s;
+}
+
+/* ตอนเอาเมาส์ชี้ หรือกำลังลาก จะมีกรอบขึ้นมา */
+.draggable-item:hover, .draggable-item.active {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.draggable-item:active { cursor: grabbing; }
+
+/* 🟢 กล่องคลุมลายเซ็น */
+.sig-wrapper {
+    position: relative;
+    width: 150px; /* ขนาดเริ่มต้น */
+    height: auto;
+    min-width: 50px;
+}
+
+.sig-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none; /* ห้ามเมาส์ไปจับโดนรูประหว่างลาก */
+}
+
+/* 🟢 จุดจับย่อ-ขยายที่มุมขวาล่าง (จะโผล่ตอนเอาเมาส์ชี้) */
+.resize-handle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: var(--primary);
+    border: 2px solid white;
+    border-radius: 50%;
+    bottom: -8px;
+    right: -8px;
+    cursor: nwse-resize; /* ไอคอนเมาส์รูปลูกศรเฉียง */
+    display: none;
+    z-index: 60;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* โชว์จุดจับเฉพาะตอนเอาเมาส์ชี้คลุม */
+.draggable-item:hover .resize-handle, 
+.draggable-item.active .resize-handle {
+    display: block;
+}
+
+/* 🟢 ตกแต่งช่องวันที่ให้สวยงามเวลากดเลือกปฏิทิน */
+input[type="date"].editable-input {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
+    padding: 4px 8px;
+    border: 1px dashed transparent;
+}
+input[type="date"].editable-input:hover {
+    border-color: #cbd5e1;
+}
+
+.resizable-sig img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none; /* ห้ามเมาส์ไปจับโดนรูปตอนลาก */
+}
+
+/* ปุ่มกากบาทลบไอเทมทิ้ง */
+.item-delete-btn {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: #dc2626;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: none; /* ซ่อนไว้ก่อน */
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 60;
+}
+
+.draggable-item:hover .item-delete-btn { display: flex; } /* โชว์ปุ่มลบตอนเอาเมาส์ชี้ */
+
+/* ช่องกรอกข้อความ/วันที่ใสๆ บนกระดาษ */
+.editable-input {
+    border: none;
+    background: transparent;
+    font-family: 'Prompt';
+    font-size: 15px;
+    color: #0f172a;
+    outline: none;
+    min-width: 120px;
+    padding: 2px 5px;
+    font-weight: 500;
+}
+.editable-input::placeholder { color: #94a3b8; }

@@ -337,7 +337,7 @@
                     
                     <div class="panel">
                         <div class="panel-header" style="border-bottom: none; padding-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
-                            <h4 class="step-title"><span class="step-num">2</span> ลายเซ็นของคุณ (ผู้ส่ง)</h4>
+                            <h4 class="step-title"><span class="step-num">2</span> จัดการเอกสาร (ลายเซ็น/ข้อความ)</h4>
                             
                             <div id="pdfPagination" style="display: none; align-items: center; gap: 10px;">
                                 <button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;" onclick="onPrevPage()"><i class="fa-solid fa-chevron-left"></i></button>
@@ -352,20 +352,15 @@
                                 กรุณาอัปโหลดไฟล์ PDF ในขั้นตอนที่ 1<br>เพื่อแสดงเอกสารที่นี่
                             </p>
                             
-                            <div id="pdfRenderWrapper" style="position: relative; display: none; margin: 0 auto;">
-                                <canvas id="pdfRenderCanvas" style="box-shadow: 0 5px 15px rgba(0,0,0,0.2);"></canvas>
-                                
-                                <div id="placedSignature" class="drag-signature">
-                                    <button class="del-sig-btn" onclick="removePlacedSignature()"><i class="fa-solid fa-xmark"></i></button>
-                                    <img id="placedSignatureImg" src="">
+                            <div id="pdfRenderWrapper" style="position: relative; display: none; margin: 0 auto; user-select: none;">
+                                <canvas id="pdfRenderCanvas" style="box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: block;"></canvas>
                                 </div>
-                            </div>
                         </div>
                         
-                        <div style="text-align: right; margin-top: 15px;">
-                            <button class="btn btn-outline" style="display: inline-flex;" onclick="placeSignatureOnPaper()">
-                                <i class="fa-solid fa-pen-nib"></i> วางลายเซ็นของฉัน
-                            </button>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 15px; flex-wrap: wrap;">
+                            <button class="btn btn-outline" onclick="addTextToPaper()"><i class="fa-solid fa-font"></i> เพิ่มข้อความ</button>
+                            <button class="btn btn-outline" onclick="addDateToPaper()"><i class="fa-regular fa-calendar-days"></i> เพิ่มวันที่</button>
+                            <button class="btn btn-primary" onclick="placeSignatureOnPaper()"><i class="fa-solid fa-pen-nib"></i> วางลายเซ็น</button>
                         </div>
                     </div>
 
